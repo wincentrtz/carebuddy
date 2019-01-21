@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import './mood.dart';
+import './task.dart';
+
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -55,10 +58,11 @@ class HomePage extends StatelessWidget {
                       backgroundColor: Colors.transparent,
                     ),
                     Container(
-                        child: Image.asset(
-                      'assets/good-small.png',
-                      width: 40.0,
-                    )),
+                      child: Image.asset(
+                        'assets/good-small.png',
+                        width: 40.0,
+                      ),
+                    ),
                   ],
                 ),
               ],
@@ -103,72 +107,136 @@ class HomePage extends StatelessWidget {
             SizedBox(
               height: 40.0,
             ),
-            Container(
-              padding: EdgeInsets.only(
-                top: 10.0,
-                left: 10.0,
-                right: 10.0,
-                bottom: 40.0,
-              ),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.0),
-                image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: AssetImage('assets/card-mood.png'),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (BuildContext context,
+                        Animation<double> animation,
+                        Animation<double> secondaryAnimation) {
+                      return MoodPage();
+                    },
+                    transitionsBuilder: (BuildContext context,
+                        Animation<double> animation,
+                        Animation<double> secondaryAnimation,
+                        Widget child) {
+                      return SlideTransition(
+                        position: new Tween<Offset>(
+                          begin: const Offset(1.0, 0.0),
+                          end: Offset.zero,
+                        ).animate(animation),
+                        child: new SlideTransition(
+                          position: new Tween<Offset>(
+                            begin: Offset.zero,
+                            end: const Offset(0.0, 1.0),
+                          ).animate(secondaryAnimation),
+                          child: child,
+                        ),
+                      );
+                    },
+                  ),
+                );
+              },
+              child: Container(
+                padding: EdgeInsets.only(
+                  top: 10.0,
+                  left: 10.0,
+                  right: 10.0,
+                  bottom: 40.0,
                 ),
-              ),
-              margin: EdgeInsets.symmetric(vertical: 10),
-              width: deviceWidth * 0.7,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Image.asset(
-                    'assets/mood.png',
-                    width: 64,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.0),
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: AssetImage('assets/card-mood.png'),
                   ),
-                  Text(
-                    'MOOD TRACKER',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24.0,
-                      fontWeight: FontWeight.bold,
+                ),
+                margin: EdgeInsets.symmetric(vertical: 10),
+                width: deviceWidth * 0.7,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Image.asset(
+                      'assets/mood.png',
+                      width: 64,
                     ),
-                  ),
-                ],
+                    Text(
+                      'MOOD TRACKER',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-            Container(
-              padding: EdgeInsets.only(
-                top: 10.0,
-                left: 10.0,
-                right: 10.0,
-                bottom: 40.0,
-              ),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.0),
-                image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: AssetImage('assets/card-task.png'),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (BuildContext context,
+                        Animation<double> animation,
+                        Animation<double> secondaryAnimation) {
+                      return TaskPage();
+                    },
+                    transitionsBuilder: (BuildContext context,
+                        Animation<double> animation,
+                        Animation<double> secondaryAnimation,
+                        Widget child) {
+                      return SlideTransition(
+                        position: new Tween<Offset>(
+                          begin: const Offset(1.0, 0.0),
+                          end: Offset.zero,
+                        ).animate(animation),
+                        child: new SlideTransition(
+                          position: new Tween<Offset>(
+                            begin: Offset.zero,
+                            end: const Offset(0.0, 1.0),
+                          ).animate(secondaryAnimation),
+                          child: child,
+                        ),
+                      );
+                    },
+                  ),
+                );
+              },
+              child: Container(
+                padding: EdgeInsets.only(
+                  top: 10.0,
+                  left: 10.0,
+                  right: 10.0,
+                  bottom: 40.0,
                 ),
-              ),
-              margin: EdgeInsets.symmetric(vertical: 10),
-              width: deviceWidth * 0.7,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Image.asset(
-                    'assets/task.png',
-                    width: 64,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.0),
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: AssetImage('assets/card-task.png'),
                   ),
-                  Text(
-                    'DAILY TASKS',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24.0,
-                      fontWeight: FontWeight.bold,
+                ),
+                margin: EdgeInsets.symmetric(vertical: 10),
+                width: deviceWidth * 0.7,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Image.asset(
+                      'assets/task.png',
+                      width: 64,
                     ),
-                  ),
-                ],
+                    Text(
+                      'DAILY TASKS',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
             Container(

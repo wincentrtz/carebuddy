@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import './pages/login.dart';
 import './pages/daily-mood.dart';
 import './pages/home.dart';
+import './pages/mood.dart';
+import './pages/task.dart';
 
 void main() => runApp(MyApp());
 
@@ -28,7 +30,9 @@ class MyApp extends StatelessWidget {
       routes: {
         '/login': (BuildContext context) => LoginPage(),
         '/daily-mood': (BuildContext context) => DailyMoodPage(),
-        '/home': (BuildContext context) => HomePage()
+        '/home': (BuildContext context) => HomePage(),
+        '/mood': (BuildContext context) => MoodPage(),
+        '/task': (BuildContext context) => TaskPage()
       },
     );
   }
