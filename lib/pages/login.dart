@@ -64,18 +64,20 @@ class _LoginPageState extends State<LoginPage> {
                   )),
               Container(
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment(
-                        0.8, 0.0), // 10% of the width, so there are ten blinds.
-                    colors: [
-                      Color(0xFF267EA0),
-                      Color(0xFF25263b)
-                    ], // whitish to gray
-                    tileMode:
-                        TileMode.clamp, // repeats the gradient over the canvas
-                  ),
-                ),
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment(0.8,
+                          0.0), // 10% of the width, so there are ten blinds.
+                      colors: [
+                        Color(0xFF267EA0),
+                        Color(0xFF25263b)
+                      ], // whitish to gray
+                      tileMode: TileMode
+                          .clamp, // repeats the gradient over the canvas
+                    ),
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(15.0),
+                        topRight: Radius.circular(15.0))),
                 height: deviceHeigth * 0.5,
                 padding: EdgeInsets.symmetric(horizontal: 48.0),
                 child: Form(
@@ -123,7 +125,10 @@ class _LoginPageState extends State<LoginPage> {
                               borderRadius: BorderRadius.circular(30.0)),
                           color: Color(0xFF267EA0),
                           textColor: Colors.white,
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.pushReplacementNamed(
+                                context, '/daily-mood');
+                          },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[

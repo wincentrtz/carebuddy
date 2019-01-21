@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import './pages/login.dart';
+import './pages/daily-mood.dart';
+import './pages/home.dart';
 
 void main() => runApp(MyApp());
 
@@ -25,6 +27,8 @@ class MyApp extends StatelessWidget {
       home: LoginPage(),
       routes: {
         '/login': (BuildContext context) => LoginPage(),
+        '/daily-mood': (BuildContext context) => DailyMoodPage(),
+        '/home': (BuildContext context) => HomePage()
       },
     );
   }
