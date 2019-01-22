@@ -273,38 +273,43 @@ class HomePage extends StatelessWidget {
                 ],
               ),
             ),
-            Container(
-              padding: EdgeInsets.only(
-                top: 10.0,
-                left: 10.0,
-                right: 10.0,
-                bottom: 40.0,
-              ),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.0),
-                image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: AssetImage('assets/card-article.png'),
+            GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, '/article');
+              },
+              child: Container(
+                padding: EdgeInsets.only(
+                  top: 10.0,
+                  left: 10.0,
+                  right: 10.0,
+                  bottom: 40.0,
                 ),
-              ),
-              margin: EdgeInsets.symmetric(vertical: 10),
-              width: deviceWidth * 0.7,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Image.asset(
-                    'assets/article.png',
-                    width: 64,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.0),
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: AssetImage('assets/card-article.png'),
                   ),
-                  Text(
-                    'ARTICLES OF THE WEEK',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24.0,
-                      fontWeight: FontWeight.bold,
+                ),
+                margin: EdgeInsets.symmetric(vertical: 10),
+                width: deviceWidth * 0.7,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Image.asset(
+                      'assets/article.png',
+                      width: 64,
                     ),
-                  ),
-                ],
+                    Text(
+                      'ARTICLES OF THE WEEK',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
