@@ -33,14 +33,10 @@ class AddTaskPage extends StatelessWidget {
                     ),
                     textAlign: TextAlign.right,
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pop(context, 'add');
-                    },
-                    child: FlatButton(
-                      child: Text('Add'),
-                    ),
-                  )
+                  FlatButton(
+                    child: Text('Add'),
+                    onPressed: () => Navigator.pop(context, 'add'),
+                  ),
                 ],
               ),
               SizedBox(

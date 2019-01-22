@@ -161,7 +161,7 @@ class _TaskPageState extends State<TaskPage> {
                     width: 20.0,
                   ),
                   Image.asset(
-                    'assets/task.png',
+                    'assets/calendar.png',
                     width: 64.0,
                   ),
                 ],

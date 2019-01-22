@@ -2,21 +2,16 @@ import 'package:flutter/material.dart';
 
 class ArticlePage extends StatelessWidget {
   @override
-  List<String> articles = ['Article 1', 'Article 2', 'Article 3'];
-  List<String> articlesOld = [
-    'Article 4',
-    'Article 5',
-    'Article 6',
-    'Article 7',
-    'Article 8',
-    'Article 9',
-    'Article 10',
-  ];
+  final List<String> _articles;
+  final List<String> _articlesOld;
+
+  ArticlePage(this._articles, this._articlesOld);
 
   Widget _buildArticleCard(context, index) {
     final double deviceWidth = MediaQuery.of(context).size.width;
     return GestureDetector(
-      onTap: () {},
+      onTap: () =>
+          Navigator.pushNamed(context, '/article-detail/' + index.toString()),
       child: Container(
         width: deviceWidth * 0.8,
         margin: EdgeInsets.symmetric(horizontal: 40.0),
@@ -34,7 +29,7 @@ class ArticlePage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      articles[index],
+                      _articles[index],
                       style: TextStyle(
                         fontSize: 20.0,
                         fontWeight: FontWeight.bold,
@@ -77,7 +72,7 @@ class ArticlePage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    articlesOld[index],
+                    _articlesOld[index],
                     style: TextStyle(
                       fontSize: 22.0,
                       fontWeight: FontWeight.bold,
@@ -130,14 +125,14 @@ class ArticlePage extends StatelessWidget {
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemBuilder: _buildArticleCard,
-                  itemCount: articles.length,
+                  itemCount: _articles.length,
                 ),
               ),
               ListView.builder(
                 physics: ClampingScrollPhysics(),
                 shrinkWrap: true,
                 itemBuilder: _buildArticleListTile,
-                itemCount: articlesOld.length,
+                itemCount: _articlesOld.length,
               ),
             ]),
           ),
