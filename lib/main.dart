@@ -5,6 +5,8 @@ import './pages/daily-mood.dart';
 import './pages/home.dart';
 import './pages/mood.dart';
 import './pages/task.dart';
+import './pages/add-task.dart';
+import './pages/mood-detail.dart';
 
 void main() => runApp(MyApp());
 
@@ -32,7 +34,9 @@ class MyApp extends StatelessWidget {
         '/daily-mood': (BuildContext context) => DailyMoodPage(),
         '/home': (BuildContext context) => HomePage(),
         '/mood': (BuildContext context) => MoodPage(),
-        '/task': (BuildContext context) => TaskPage()
+        '/task': (BuildContext context) => TaskPage(),
+        '/add-task': (BuildContext context) => AddTaskPage(),
+        '/mood-detail': (BuildContext context) => MoodDetailPage()
       },
     );
   }

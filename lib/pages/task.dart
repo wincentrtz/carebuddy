@@ -11,6 +11,7 @@ class TaskPage extends StatefulWidget {
 class _TaskPageState extends State<TaskPage> {
   @override
   bool _isChecked = false;
+  bool _snackbar = false;
 
   List<String> tasks = ['Things to make me happy', 'Caregiving'];
 
@@ -28,7 +29,7 @@ class _TaskPageState extends State<TaskPage> {
           color: Colors.white,
         ),
         width: deviceWidth * 0.75,
-        margin: EdgeInsets.all(40.0),
+        margin: EdgeInsets.symmetric(horizontal: 40.0, vertical: 20.0),
         child: Container(
           margin: EdgeInsets.all(20.0),
           child: Column(
@@ -94,10 +95,9 @@ class _TaskPageState extends State<TaskPage> {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
-            end: Alignment(
-                0.8, 0.0), // 10% of the width, so there are ten blinds.
-            colors: [Color(0xFF25263b), Color(0xFF714f9f)], // whitish to gray
-            tileMode: TileMode.clamp, // repeats the gradient over the canvas
+            end: Alignment(0.8, 0.0),
+            colors: [Color(0xFF25263b), Color(0xFF714f9f)],
+            tileMode: TileMode.clamp,
           ),
         ),
         child: Column(
@@ -120,7 +120,7 @@ class _TaskPageState extends State<TaskPage> {
               height: 20.0,
             ),
             Container(
-              margin: EdgeInsets.only(left: 44.0, bottom: 20.0),
+              margin: EdgeInsets.only(left: 44.0),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -172,6 +172,29 @@ class _TaskPageState extends State<TaskPage> {
                 scrollDirection: Axis.horizontal,
                 itemBuilder: _buildTaskCard,
                 itemCount: tasks.length,
+              ),
+            ),
+            Container(
+              alignment: Alignment.center,
+              child: FloatingActionButton(
+                onPressed: () async {
+                  final result =
+                      await Navigator.pushNamed(context, '/add-task');
+                  if (result == 'add') {}
+                },
+                backgroundColor: Color(0xFF09a24a),
+                child: Icon(Icons.add),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(bottom: 20.0, top: 10.0),
+              alignment: Alignment.center,
+              child: Text(
+                'Add New Task',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ],

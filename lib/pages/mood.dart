@@ -68,41 +68,46 @@ class MoodPage extends StatelessWidget {
               margin: EdgeInsets.symmetric(horizontal: 48.0),
               child: Column(
                 children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.only(top: 30.0),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50.0),
-                      color: Color(0xFF3B8740),
-                    ),
-                    child: Row(
-                      children: <Widget>[
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(50.0),
-                            color: Color.fromRGBO(115, 193, 118, 0.5),
-                          ),
-                          padding: EdgeInsets.all(16.0),
-                          child: Text(
-                            '28\nDEC',
-                            style: TextStyle(
-                              fontSize: 20.0,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, '/mood-detail');
+                    },
+                    child: Container(
+                      margin: EdgeInsets.only(top: 30.0),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50.0),
+                        color: Color(0xFF3B8740),
+                      ),
+                      child: Row(
+                        children: <Widget>[
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50.0),
+                              color: Color.fromRGBO(115, 193, 118, 0.5),
                             ),
-                            textAlign: TextAlign.center,
+                            padding: EdgeInsets.all(16.0),
+                            child: Text(
+                              '28\nDEC',
+                              style: TextStyle(
+                                fontSize: 20.0,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
                           ),
-                        ),
-                        SizedBox(
-                          width: 20.0,
-                        ),
-                        Text(
-                          'BBQ Party',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20.0),
-                        ),
-                      ],
+                          SizedBox(
+                            width: 20.0,
+                          ),
+                          Text(
+                            'BBQ Party',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20.0),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
