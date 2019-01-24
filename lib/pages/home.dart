@@ -239,38 +239,41 @@ class HomePage extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
-              padding: EdgeInsets.only(
-                top: 10.0,
-                left: 10.0,
-                right: 10.0,
-                bottom: 40.0,
-              ),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.0),
-                image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: AssetImage('assets/card-support.png'),
+            GestureDetector(
+              onTap: () => Navigator.pushNamed(context, '/support'),
+              child: Container(
+                padding: EdgeInsets.only(
+                  top: 10.0,
+                  left: 10.0,
+                  right: 10.0,
+                  bottom: 40.0,
                 ),
-              ),
-              margin: EdgeInsets.symmetric(vertical: 10),
-              width: deviceWidth * 0.7,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Image.asset(
-                    'assets/support.png',
-                    width: 64,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.0),
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: AssetImage('assets/card-support.png'),
                   ),
-                  Text(
-                    'SUPPORT GROUP',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24.0,
-                      fontWeight: FontWeight.bold,
+                ),
+                margin: EdgeInsets.symmetric(vertical: 10),
+                width: deviceWidth * 0.7,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Image.asset(
+                      'assets/support.png',
+                      width: 64,
                     ),
-                  ),
-                ],
+                    Text(
+                      'SUPPORT GROUP',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
             GestureDetector(

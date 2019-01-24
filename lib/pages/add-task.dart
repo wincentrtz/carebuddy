@@ -1,6 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 
-class AddTaskPage extends StatelessWidget {
+class AddTaskPage extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    return _AddTaskPageState();
+  }
+}
+
+class _AddTaskPageState extends State<AddTaskPage> {
+  bool _timeOption = false;
+
+  final formats = {
+    InputType.both: DateFormat("EEEE, MMMM d, yyyy 'at' h:mma"),
+    InputType.date: DateFormat('yyyy-MM-dd'),
+    InputType.time: DateFormat("HH:mm"),
+  };
+
+  InputType inputType = InputType.both;
+  bool editable = true;
+  DateTime date;
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -44,14 +66,54 @@ class AddTaskPage extends StatelessWidget {
               ),
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 40.0),
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    labelText: 'What tasks are you planning to do?',
-                    labelStyle: TextStyle(
-                      color: Colors.black,
+                child: Column(
+                  children: <Widget>[
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: 'What tasks are you planning to do?',
+                        labelStyle: TextStyle(
+                          color: Colors.black,
+                        ),
+                      ),
+                      maxLines: 4,
                     ),
-                  ),
-                  maxLines: 4,
+                    ListTile(
+                      leading: Text('Time'),
+                      trailing: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _timeOption = !_timeOption;
+                          });
+                        },
+                        child: _timeOption
+                            ? Icon(
+                                Icons.radio_button_checked,
+                                size: 30.0,
+                                color: Colors.black,
+                              )
+                            : Icon(
+                                Icons.radio_button_unchecked,
+                                size: 30.0,
+                                color: Colors.black,
+                              ),
+                      ),
+                    ),
+                    Divider(
+                      color: Colors.black,
+                      height: 5.0,
+                    ),
+                    _timeOption
+                        ? DateTimePickerFormField(
+                            inputType: inputType,
+                            format: formats[inputType],
+                            editable: editable,
+                            decoration: InputDecoration(
+                                labelText: 'Date/Time',
+                                hasFloatingPlaceholder: false),
+                            onChanged: (dt) => setState(() => date = dt),
+                          )
+                        : Container(),
+                  ],
                 ),
               ),
             ],

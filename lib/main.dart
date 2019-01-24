@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import './pages/login.dart';
 import './pages/daily-mood.dart';
+import './pages/daily-mood-detail.dart';
 import './pages/home.dart';
 import './pages/mood.dart';
 import './pages/task.dart';
@@ -9,6 +10,7 @@ import './pages/add-task.dart';
 import './pages/mood-detail.dart';
 import './pages/article.dart';
 import './pages/article-detail.dart';
+import './pages/support.dart';
 
 void main() => runApp(MyApp());
 
@@ -28,6 +30,8 @@ class MyApp extends StatelessWidget {
     'Article 8 Title',
     'Article 9 Title'
   ];
+
+  int mood;
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -48,6 +52,7 @@ class MyApp extends StatelessWidget {
         routes: {
           '/login': (BuildContext context) => LoginPage(),
           '/daily-mood': (BuildContext context) => DailyMoodPage(),
+          '/daily-mood-detail': (BuildContext context) => DailyMoodDetailPage(),
           '/home': (BuildContext context) => HomePage(),
           '/mood': (BuildContext context) => MoodPage(),
           '/task': (BuildContext context) => TaskPage(),
@@ -55,6 +60,7 @@ class MyApp extends StatelessWidget {
           '/mood-detail': (BuildContext context) => MoodDetailPage(),
           '/article': (BuildContext context) =>
               ArticlePage(articles, articleOld),
+          '/support': (BuildContext context) => SupportPage(),
         },
         onGenerateRoute: (RouteSettings settings) {
           final List<String> pathElements = settings.name.split('/');

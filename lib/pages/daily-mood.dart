@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import './daily-mood-detail.dart';
 
 class DailyMoodPage extends StatelessWidget {
   @override
@@ -48,7 +49,34 @@ class DailyMoodPage extends StatelessWidget {
                   children: <Widget>[
                     GestureDetector(
                       onTap: () {
-                        Navigator.pushReplacementNamed(context, '/home');
+                        Navigator.push(
+                          context,
+                          PageRouteBuilder(
+                            pageBuilder: (BuildContext context,
+                                Animation<double> animation,
+                                Animation<double> secondaryAnimation) {
+                              return DailyMoodDetailPage();
+                            },
+                            transitionsBuilder: (BuildContext context,
+                                Animation<double> animation,
+                                Animation<double> secondaryAnimation,
+                                Widget child) {
+                              return SlideTransition(
+                                position: new Tween<Offset>(
+                                  begin: const Offset(1.0, 0.0),
+                                  end: Offset.zero,
+                                ).animate(animation),
+                                child: new SlideTransition(
+                                  position: new Tween<Offset>(
+                                    begin: Offset.zero,
+                                    end: const Offset(0.0, 1.0),
+                                  ).animate(secondaryAnimation),
+                                  child: child,
+                                ),
+                              );
+                            },
+                          ),
+                        );
                       },
                       child: Row(
                         children: <Widget>[
