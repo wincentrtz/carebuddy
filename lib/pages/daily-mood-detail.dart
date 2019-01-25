@@ -103,7 +103,9 @@ class DailyMoodDetailPage extends StatelessWidget {
                   padding: EdgeInsets.all(15.0),
                   width: double.infinity,
                   child: RaisedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushReplacementNamed(context, '/home');
+                    },
                     child: Text('SUBMIT'),
                   ),
                 ),

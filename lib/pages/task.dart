@@ -160,9 +160,12 @@ class _TaskPageState extends State<TaskPage> {
                   SizedBox(
                     width: 20.0,
                   ),
-                  Image.asset(
-                    'assets/calendar.png',
-                    width: 64.0,
+                  GestureDetector(
+                    onTap: () => Navigator.pushNamed(context, '/calendar'),
+                    child: Image.asset(
+                      'assets/calendar.png',
+                      width: 64.0,
+                    ),
                   ),
                 ],
               ),

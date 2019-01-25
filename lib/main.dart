@@ -11,6 +11,7 @@ import './pages/mood-detail.dart';
 import './pages/article.dart';
 import './pages/article-detail.dart';
 import './pages/support.dart';
+import './pages/calendar.dart';
 
 void main() => runApp(MyApp());
 
@@ -61,6 +62,7 @@ class MyApp extends StatelessWidget {
           '/article': (BuildContext context) =>
               ArticlePage(articles, articleOld),
           '/support': (BuildContext context) => SupportPage(),
+          '/calendar': (BuildContext context) => CalendarPage(),
         },
         onGenerateRoute: (RouteSettings settings) {
           final List<String> pathElements = settings.name.split('/');
