@@ -12,6 +12,7 @@ import './pages/article.dart';
 import './pages/article-detail.dart';
 import './pages/support.dart';
 import './pages/calendar.dart';
+import './pages/support-detail.dart';
 
 void main() => runApp(MyApp());
 
@@ -62,6 +63,7 @@ class MyApp extends StatelessWidget {
           '/article': (BuildContext context) =>
               ArticlePage(articles, articleOld),
           '/support': (BuildContext context) => SupportPage(),
+          '/support-detail': (BuildContext context) => SupportDetailPage(),
           '/calendar': (BuildContext context) => CalendarPage(),
         },
         onGenerateRoute: (RouteSettings settings) {
