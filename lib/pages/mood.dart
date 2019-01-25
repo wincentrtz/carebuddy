@@ -3,13 +3,12 @@ import 'package:flutter/material.dart';
 class MoodPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final double deviceHeigth = MediaQuery.of(context).size.height;
     final double deviceWidth = MediaQuery.of(context).size.width;
     // TODO: implement build
     return Scaffold(
       body: Container(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Container(
               width: deviceWidth,
@@ -113,6 +112,29 @@ class MoodPage extends StatelessWidget {
                 ],
               ),
             ),
+            GestureDetector(
+              onTap: () => Navigator.pushNamed(context, '/mood-trend'),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Color(0xFF1a4687),
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                padding: EdgeInsets.symmetric(
+                  vertical: 10,
+                  horizontal: 10,
+                ),
+                margin: EdgeInsets.only(top: 20),
+                width: deviceWidth * 0.7,
+                child: Text(
+                  'Mood Trends',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            )
           ],
         ),
       ),

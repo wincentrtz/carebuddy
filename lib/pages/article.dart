@@ -98,8 +98,6 @@ class ArticlePage extends StatelessWidget {
   }
 
   Widget build(BuildContext context) {
-    final double deviceHeigth = MediaQuery.of(context).size.height;
-    final double deviceWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       body: CustomScrollView(
         slivers: <Widget>[

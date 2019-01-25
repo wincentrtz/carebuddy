@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import '../models/mood.dart';
 
 class DailyMoodDetailPage extends StatelessWidget {
+  Mood _mood;
+
+  DailyMoodDetailPage(this._mood);
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -41,15 +46,15 @@ class DailyMoodDetailPage extends StatelessWidget {
                 Row(
                   children: <Widget>[
                     Image.asset(
-                      'assets/amazing.png',
+                      _mood.moodImageUrl,
                       width: 96.0,
                     ),
                     Text(
-                      'Amazing!',
+                      _mood.moodLabel,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 24.0,
-                        color: Color(0xFFFFD11F),
+                        color: _mood.hexToColor(_mood.moodColorTheme),
                       ),
                     ),
                   ],
