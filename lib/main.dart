@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 import './models/mood.dart';
+import './models/user.dart';
 
 import './pages/login.dart';
+import './pages/register.dart';
 import './pages/daily-mood.dart';
 import './pages/home.dart';
 import './pages/mood.dart';
@@ -56,6 +58,13 @@ class MyApp extends StatelessWidget {
     'Article 9 Title'
   ];
 
+  User user;
+
+  void setUserAccount(Map<String, dynamic> userData) {
+    user = new User(userData['name'], userData['gender'], userData['dob'],
+        userData['phone'], userData['email'], userData['password']);
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -66,6 +75,7 @@ class MyApp extends StatelessWidget {
       home: LoginPage(),
       routes: {
         '/login': (BuildContext context) => LoginPage(),
+        '/register': (BuildContext context) => RegisterPage(setUserAccount),
         '/daily-mood': (BuildContext context) => DailyMoodPage(moods),
         '/home': (BuildContext context) => HomePage(),
         '/mood': (BuildContext context) => MoodPage(),

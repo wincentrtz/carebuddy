@@ -149,13 +149,16 @@ class _LoginPageState extends State<LoginPage> {
                         'Donʼt have an account yet?',
                         style: TextStyle(color: Colors.white),
                       ),
-                      Text(
-                        'Create an account',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.w500),
-                      )
+                      GestureDetector(
+                        onTap: () => Navigator.pushNamed(context, '/register'),
+                        child: Text(
+                          'Create an account',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ),
                     ],
                   ),
                 ),

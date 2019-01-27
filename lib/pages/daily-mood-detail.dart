@@ -7,6 +7,7 @@ import '../models/mood.dart';
 
 class DailyMoodDetailPage extends StatefulWidget {
   Mood _mood;
+
   DailyMoodDetailPage(this._mood);
 
   @override
@@ -159,9 +160,7 @@ class _DailyMoodDetailPageState extends State<DailyMoodDetailPage> {
                       ),
                       maxLines: 4,
                       onSaved: (String value) {
-                        setState(() {
-                          _tempDailyMoodData['dailyMoodDescription'] = value;
-                        });
+                        _tempDailyMoodData['dailyMoodDescription'] = value;
                       },
                     ),
                   ),
