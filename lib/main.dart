@@ -4,7 +4,6 @@ import './models/mood.dart';
 
 import './pages/login.dart';
 import './pages/daily-mood.dart';
-import './pages/daily-mood-detail.dart';
 import './pages/home.dart';
 import './pages/mood.dart';
 import './pages/task.dart';

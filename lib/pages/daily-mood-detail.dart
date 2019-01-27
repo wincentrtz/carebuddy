@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
 import '../models/mood.dart';
@@ -19,10 +20,15 @@ class _DailyMoodDetailPageState extends State<DailyMoodDetailPage> {
   final GlobalKey<FormState> _dailyFormKey = GlobalKey<FormState>();
   Map<String, String> _tempDailyMoodData = {
     'dailyMoodTitle': null,
-    'dailyMoodDescription': null
+    'dailyMoodDescription': null,
+    'dailyMoodLabel': "",
+    'dailyMoodUserId': "a",
   };
 
   _submitDailyMoodForm() async {
+    var now = new DateTime.now();
+    DateTime date = new DateTime(now.year, now.month, now.day);
+    _tempDailyMoodData['dailyMoodLabel'] = widget._mood.moodLabel;
     _showDialog();
     var response = await http.post(
         "https://care-buddy-793cb.firebaseio.com/moods.json",
@@ -30,6 +36,8 @@ class _DailyMoodDetailPageState extends State<DailyMoodDetailPage> {
 
     if (response.statusCode == 200) {
       Navigator.of(context).pop();
+      final SharedPreferences datePref = await SharedPreferences.getInstance();
+      datePref.setString('date', date.toString());
       Navigator.pushReplacementNamed(context, '/home');
     } else {
       print(response.statusCode);
@@ -43,7 +51,7 @@ class _DailyMoodDetailPageState extends State<DailyMoodDetailPage> {
       builder: (BuildContext context) {
         // return object of type Dialog
         return AlertDialog(
-          content: new Text("Submitting Report..."),
+          content: Text("Submitting Report..."),
           actions: <Widget>[],
         );
       },

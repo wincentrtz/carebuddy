@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -10,6 +11,17 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   @override
   final GlobalKey<FormState> _loginKey = GlobalKey<FormState>();
+
+  void _doLogin() async {
+    SharedPreferences datePref = await SharedPreferences.getInstance();
+    String dateCheck = datePref.getString('date');
+    print(dateCheck);
+    if (dateCheck != null) {
+      Navigator.pushReplacementNamed(context, '/home');
+    } else {
+      Navigator.pushReplacementNamed(context, '/daily-mood');
+    }
+  }
 
   Widget build(BuildContext context) {
     final double deviceHeigth = MediaQuery.of(context).size.height;
@@ -120,10 +132,7 @@ class _LoginPageState extends State<LoginPage> {
                               borderRadius: BorderRadius.circular(30.0)),
                           color: Color(0xFF267EA0),
                           textColor: Colors.white,
-                          onPressed: () {
-                            Navigator.pushReplacementNamed(
-                                context, '/daily-mood');
-                          },
+                          onPressed: () => _doLogin(),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
