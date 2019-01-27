@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../models/user.dart';
 import './mood.dart';
 import './task.dart';
 

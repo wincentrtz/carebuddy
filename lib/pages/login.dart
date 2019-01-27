@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 class LoginPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return _LoginPageState();
   }
 }
@@ -12,11 +11,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   final GlobalKey<FormState> _loginKey = GlobalKey<FormState>();
 
-  Widget _buildEmailTextField() {}
-
   Widget build(BuildContext context) {
-    // TODO: implement build
-    final double deviceWidth = MediaQuery.of(context).size.width;
     final double deviceHeigth = MediaQuery.of(context).size.height;
     return Scaffold(
       body: GestureDetector(
@@ -102,7 +97,7 @@ class _LoginPageState extends State<LoginPage> {
                       SizedBox(
                         height: 20.0,
                       ),
-                      TextField(
+                      TextFormField(
                         decoration: InputDecoration(
                           border: new OutlineInputBorder(
                             borderRadius: const BorderRadius.all(

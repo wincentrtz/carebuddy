@@ -1,10 +1,54 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
 import '../models/mood.dart';
 
-class DailyMoodDetailPage extends StatelessWidget {
+class DailyMoodDetailPage extends StatefulWidget {
   Mood _mood;
-
   DailyMoodDetailPage(this._mood);
+
+  @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    return _DailyMoodDetailPageState();
+  }
+}
+
+class _DailyMoodDetailPageState extends State<DailyMoodDetailPage> {
+  final GlobalKey<FormState> _dailyFormKey = GlobalKey<FormState>();
+  Map<String, String> _tempDailyMoodData = {
+    'dailyMoodTitle': null,
+    'dailyMoodDescription': null
+  };
+
+  _submitDailyMoodForm() async {
+    _showDialog();
+    var response = await http.post(
+        "https://care-buddy-793cb.firebaseio.com/moods.json",
+        body: json.encode(_tempDailyMoodData));
+
+    if (response.statusCode == 200) {
+      Navigator.of(context).pop();
+      Navigator.pushReplacementNamed(context, '/home');
+    } else {
+      print(response.statusCode);
+    }
+  }
+
+  void _showDialog() {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          content: new Text("Submitting Report..."),
+          actions: <Widget>[],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,95 +70,108 @@ class DailyMoodDetailPage extends StatelessWidget {
             margin: EdgeInsets.all(40.0),
             decoration: BoxDecoration(
                 color: Colors.white, borderRadius: BorderRadius.circular(20.0)),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                SizedBox(
-                  height: 20.0,
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20.0),
-                  child: Text(
-                    'Wanna tell us why?',
-                    style: TextStyle(
-                      fontSize: 28.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.left,
+            child: Form(
+              key: _dailyFormKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(
+                    height: 20.0,
                   ),
-                ),
-                Row(
-                  children: <Widget>[
-                    Image.asset(
-                      _mood.moodImageUrl,
-                      width: 96.0,
-                    ),
-                    Text(
-                      _mood.moodLabel,
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Text(
+                      'Wanna tell us why?',
                       style: TextStyle(
+                        fontSize: 28.0,
                         fontWeight: FontWeight.bold,
-                        fontSize: 24.0,
-                        color: _mood.hexToColor(_mood.moodColorTheme),
+                      ),
+                      textAlign: TextAlign.left,
+                    ),
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Image.asset(
+                        widget._mood.moodImageUrl,
+                        width: 96.0,
+                      ),
+                      Text(
+                        widget._mood.moodLabel,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24.0,
+                          color: widget._mood
+                              .hexToColor(widget._mood.moodColorTheme),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 20.0),
+                    padding: EdgeInsets.all(15.0),
+                    decoration: BoxDecoration(
+                      color: Colors.grey,
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: Text(
+                      'What\'s happening at the moment?',
+                      style: TextStyle(
+                        fontSize: 16,
                       ),
                     ),
-                  ],
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20.0),
-                  padding: EdgeInsets.all(15.0),
-                  decoration: BoxDecoration(
-                    color: Colors.grey,
-                    borderRadius: BorderRadius.circular(10.0),
                   ),
-                  child: Text(
-                    'What\'s happening at the moment?',
-                    style: TextStyle(
-                      fontSize: 16,
+                  Container(
+                    margin:
+                        EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                    padding: EdgeInsets.all(15.0),
+                    decoration: BoxDecoration(
+                      color: Colors.grey,
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                        hintText: "Activity Title",
+                      ),
+                      onSaved: (String value) {
+                        _tempDailyMoodData['dailyMoodTitle'] = value;
+                      },
                     ),
                   ),
-                ),
-                Container(
-                  margin:
-                      EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-                  padding: EdgeInsets.all(15.0),
-                  decoration: BoxDecoration(
-                    color: Colors.grey,
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                      hintText: "Activity Title",
+                  Container(
+                    margin:
+                        EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                    padding: EdgeInsets.all(15.0),
+                    decoration: BoxDecoration(
+                      color: Colors.grey,
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                        hintText: "Activity Description",
+                      ),
+                      maxLines: 4,
+                      onSaved: (String value) {
+                        setState(() {
+                          _tempDailyMoodData['dailyMoodDescription'] = value;
+                        });
+                      },
                     ),
                   ),
-                ),
-                Container(
-                  margin:
-                      EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-                  padding: EdgeInsets.all(15.0),
-                  decoration: BoxDecoration(
-                    color: Colors.grey,
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                      hintText: "Activity Description",
+                  Container(
+                    margin:
+                        EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+                    padding: EdgeInsets.all(15.0),
+                    width: double.infinity,
+                    child: RaisedButton(
+                      onPressed: () {
+                        _dailyFormKey.currentState.save();
+                        _submitDailyMoodForm();
+                      },
+                      child: Text('SUBMIT'),
                     ),
-                    maxLines: 4,
                   ),
-                ),
-                Container(
-                  margin:
-                      EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-                  padding: EdgeInsets.all(15.0),
-                  width: double.infinity,
-                  child: RaisedButton(
-                    onPressed: () {
-                      Navigator.pushReplacementNamed(context, '/home');
-                    },
-                    child: Text('SUBMIT'),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
