@@ -1,20 +1,12 @@
 import 'package:flutter/material.dart';
 
 class User {
-  final String userName;
-  final String userPassword;
-  final String userEmail;
-  final String userGender;
-  final String userDOB;
-  final String userPhone;
-  final int moodIndex;
+  String id;
+  String userName;
+  String userGender;
+  String userDOB;
+  String userPhone;
 
-  User(
-      @required this.userName,
-      @required this.userPassword,
-      @required this.userEmail,
-      @required this.userGender,
-      @required this.userDOB,
-      @required this.userPhone,
-      {this.moodIndex});
+  User(@required this.id, @required this.userName, @required this.userGender,
+      @required this.userDOB, @required this.userPhone);
 }

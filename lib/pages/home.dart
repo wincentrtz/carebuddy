@@ -1,10 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
-import '../models/user.dart';
 import './mood.dart';
 import './task.dart';
+import '../models/user.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  User user;
+  Function setUserAccount;
+  Function checkUser;
+
+  HomePage(this.user, this.setUserAccount, this.checkUser);
+
+  @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    return _HomePageState();
+  }
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    widget.checkUser;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final double deviceHeigth = MediaQuery.of(context).size.height;
@@ -29,23 +51,28 @@ class HomePage extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Column(
-                  children: <Widget>[
-                    Text(
-                      'HELLO,',
-                      style: TextStyle(
-                        fontSize: 32,
-                        color: Colors.white,
+                Container(
+                  width: 150,
+                  child: Column(
+                    children: <Widget>[
+                      AutoSizeText(
+                        'HELLO,',
+                        style: TextStyle(
+                          fontSize: 32,
+                          color: Colors.white,
+                        ),
+                        maxLines: 1,
                       ),
-                    ),
-                    Text(
-                      'ALVIN',
-                      style: TextStyle(
-                        fontSize: 36,
-                        color: Colors.white,
+                      AutoSizeText(
+                        widget.user.userName.toUpperCase(),
+                        style: TextStyle(
+                          fontSize: 36,
+                          color: Colors.white,
+                        ),
+                        maxLines: 1,
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
                 SizedBox(
                   width: 40.0,

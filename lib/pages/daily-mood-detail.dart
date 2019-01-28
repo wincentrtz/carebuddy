@@ -19,25 +19,32 @@ class DailyMoodDetailPage extends StatefulWidget {
 
 class _DailyMoodDetailPageState extends State<DailyMoodDetailPage> {
   final GlobalKey<FormState> _dailyFormKey = GlobalKey<FormState>();
-  Map<String, String> _tempDailyMoodData = {
+  Map<String, dynamic> _tempDailyMoodData = {
     'dailyMoodTitle': null,
     'dailyMoodDescription': null,
-    'dailyMoodLabel': "",
-    'dailyMoodUserId': "a",
+    'dailyMoodDate': null,
+    'dailyMoodLabel': null,
+    'dailyMoodIcon': null,
   };
 
   _submitDailyMoodForm() async {
+    final SharedPreferences datePref = await SharedPreferences.getInstance();
     var now = new DateTime.now();
     DateTime date = new DateTime(now.year, now.month, now.day);
     _tempDailyMoodData['dailyMoodLabel'] = widget._mood.moodLabel;
+    _tempDailyMoodData['dailyMoodIcon'] = widget._mood.moodImageUrl;
+    _tempDailyMoodData['dailyMoodDate'] = date.toString();
+    String userId = datePref.getString('userId');
+
+    Map<String, dynamic> dailyMoodRequestData = {userId: _tempDailyMoodData};
     _showDialog();
     var response = await http.post(
-        "https://care-buddy-793cb.firebaseio.com/moods.json",
+        "https://care-buddy-793cb.firebaseio.com/moods/" + userId + ".json",
         body: json.encode(_tempDailyMoodData));
 
     if (response.statusCode == 200) {
       Navigator.of(context).pop();
-      final SharedPreferences datePref = await SharedPreferences.getInstance();
+
       datePref.setString('date', date.toString());
       Navigator.pushReplacementNamed(context, '/home');
     } else {

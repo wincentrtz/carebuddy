@@ -3,12 +3,11 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../models/user.dart';
-
 class RegisterPage extends StatefulWidget {
-  Function _setUserAccount;
+  Function setUserAccount;
 
-  RegisterPage(this._setUserAccount);
+  RegisterPage(this.setUserAccount);
+
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -21,13 +20,13 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _passwordTextController = TextEditingController();
   final GlobalKey<FormState> _registerFormKey = GlobalKey<FormState>();
 
-  Map<String, String> _registerTempData = {
-    'name': null,
+  Map<String, dynamic> _registerTempData = {
+    'username': null,
     'gender': null,
     'email': null,
     'password': null,
     'dob': null,
-    'phone': null
+    'phone': null,
   };
 
   Widget _buildRegisterTextFormField(String text, String hint, String type) {
@@ -72,6 +71,7 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   _doRegister() async {
+    _showDialog();
     var response = await http.post(
       'https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=AIzaSyArBu7wlB07jsIYDMn8qPR8kVCMujzMqUw',
       body: json.encode(
@@ -82,16 +82,43 @@ class _RegisterPageState extends State<RegisterPage> {
         },
       ),
     );
-    print(response.body);
-    if (200 == 200) {
+    if (response.statusCode == 200) {
       SharedPreferences userPref = await SharedPreferences.getInstance();
       final Map<String, dynamic> userData = json.decode(response.body);
 
-      widget._setUserAccount(_registerTempData);
       userPref.setString('tokenId', userData['idToken'].toString());
       userPref.setString('userId', userData['localId'].toString());
+
+      var responseUserData = await http.post(
+        "https://care-buddy-793cb.firebaseio.com/" +
+            userData['localId'] +
+            ".json",
+        body: json.encode(
+          _registerTempData,
+        ),
+      );
+
+      final Map<String, dynamic> responseUserDataDecode =
+          json.decode(responseUserData.body);
+      userPref.setString('userName', userData['username']);
+      widget.setUserAccount(_registerTempData, responseUserDataDecode['name']);
+      Navigator.of(context).pop();
       Navigator.pushReplacementNamed(context, '/home');
     } else {}
+  }
+
+  void _showDialog() {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          content: Text("Submitting Report..."),
+          actions: <Widget>[],
+        );
+      },
+    );
   }
 
   Widget _buildRegisterPasswordTextFormField() {
@@ -225,7 +252,8 @@ class _RegisterPageState extends State<RegisterPage> {
                       SizedBox(
                         height: 40.0,
                       ),
-                      _buildRegisterTextFormField('Name', 'Full Name', 'name'),
+                      _buildRegisterTextFormField(
+                          'Name', 'Full Name', 'username'),
                       _buildRegisterTextFormField(
                           'Gender', 'Male / Female', 'gender'),
                       _buildRegisterTextFormField(

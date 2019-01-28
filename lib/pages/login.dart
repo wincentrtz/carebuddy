@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
+  Function setUserAccount;
+
+  LoginPage(this.setUserAccount);
   @override
   State<StatefulWidget> createState() {
     return _LoginPageState();
@@ -11,15 +16,54 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   @override
   final GlobalKey<FormState> _loginKey = GlobalKey<FormState>();
+  Map<String, dynamic> _loginTempData = {
+    'email': null,
+    'password': null,
+  };
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   void _doLogin() async {
     SharedPreferences datePref = await SharedPreferences.getInstance();
     String dateCheck = datePref.getString('date');
-    print(dateCheck);
-    if (dateCheck != null) {
+    DateTime today = DateTime.now();
+    DateTime check = DateTime.parse(dateCheck);
+    var response = await http.post(
+      'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyArBu7wlB07jsIYDMn8qPR8kVCMujzMqUw',
+      body: json.encode(
+        {
+          'email': _loginTempData['email'],
+          'password': _loginTempData['password'],
+          'returnSecureToken': true,
+        },
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      SharedPreferences userPref = await SharedPreferences.getInstance();
+      final Map<String, dynamic> userData = json.decode(response.body);
+
+      userPref.setString('tokenId', userData['idToken'].toString());
+      userPref.setString('userId', userData['localId'].toString());
+
+      var responseUserData = await http.get(
+          'https://care-buddy-793cb.firebaseio.com/' +
+              userData['localId'] +
+              '/.json');
+      final Map<String, dynamic> usersData = json.decode(responseUserData.body);
+
+      String userUniqueId;
+      usersData.forEach((String randomId, dynamic userData) {
+        userUniqueId = randomId;
+      });
+      userPref.setString('userName', userData[userUniqueId]['username']);
+      widget.setUserAccount(usersData, userUniqueId);
+
       Navigator.pushReplacementNamed(context, '/home');
-    } else {
-      Navigator.pushReplacementNamed(context, '/daily-mood');
     }
   }
 
@@ -88,6 +132,7 @@ class _LoginPageState extends State<LoginPage> {
                 height: deviceHeigth * 0.5,
                 padding: EdgeInsets.symmetric(horizontal: 48.0),
                 child: Form(
+                  key: _loginKey,
                   child: Column(
                     children: <Widget>[
                       SizedBox(
@@ -105,11 +150,15 @@ class _LoginPageState extends State<LoginPage> {
                           contentPadding: EdgeInsets.all(15.0),
                           hintText: "Email",
                         ),
+                        onSaved: (String value) {
+                          _loginTempData['email'] = value;
+                        },
                       ),
                       SizedBox(
                         height: 20.0,
                       ),
                       TextFormField(
+                        obscureText: true,
                         decoration: InputDecoration(
                           border: new OutlineInputBorder(
                             borderRadius: const BorderRadius.all(
@@ -121,6 +170,9 @@ class _LoginPageState extends State<LoginPage> {
                           contentPadding: EdgeInsets.all(15.0),
                           hintText: "Password",
                         ),
+                        onSaved: (String value) {
+                          _loginTempData['password'] = value;
+                        },
                       ),
                       SizedBox(
                         height: 10.0,
@@ -132,7 +184,10 @@ class _LoginPageState extends State<LoginPage> {
                               borderRadius: BorderRadius.circular(30.0)),
                           color: Color(0xFF267EA0),
                           textColor: Colors.white,
-                          onPressed: () => _doLogin(),
+                          onPressed: () {
+                            _loginKey.currentState.save();
+                            _doLogin();
+                          },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
