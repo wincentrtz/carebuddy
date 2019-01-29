@@ -100,7 +100,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
       final Map<String, dynamic> responseUserDataDecode =
           json.decode(responseUserData.body);
-      userPref.setString('userName', userData['username']);
       widget.setUserAccount(_registerTempData, responseUserDataDecode['name']);
       Navigator.of(context).pop();
       Navigator.pushReplacementNamed(context, '/home');

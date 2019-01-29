@@ -23,7 +23,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
@@ -60,10 +59,13 @@ class _LoginPageState extends State<LoginPage> {
       usersData.forEach((String randomId, dynamic userData) {
         userUniqueId = randomId;
       });
-      userPref.setString('userName', userData[userUniqueId]['username']);
       widget.setUserAccount(usersData, userUniqueId);
 
-      Navigator.pushReplacementNamed(context, '/home');
+      if (check.difference(today).inDays == 0) {
+        Navigator.pushReplacementNamed(context, '/home');
+      } else {
+        Navigator.pushReplacementNamed(context, '/daily-mood');
+      }
     }
   }
 

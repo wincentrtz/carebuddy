@@ -68,6 +68,7 @@ class _MyAppState extends State<MyApp> {
 
   User user;
   bool dateDiff;
+  bool userPref = false;
 
   void setUserAccount(Map<String, dynamic> userData, String userUniqueId) {
     setState(() {
@@ -93,19 +94,12 @@ class _MyAppState extends State<MyApp> {
 
   void checkUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-
     String userCheck = prefs.getString('tokenId');
-    String userId = prefs.getString('userId');
+    checkDatePref();
     if (userCheck != null) {
-      checkDatePref();
-      var responseUserData = await http
-          .get('https://care-buddy-793cb.firebaseio.com/' + userId + '/.json');
-      final Map<String, dynamic> usersData = json.decode(responseUserData.body);
-      String userUniqueId;
-      usersData.forEach((String randomId, dynamic userData) {
-        userUniqueId = randomId;
+      setState(() {
+        userPref = true;
       });
-      setUserAccount(usersData, userUniqueId);
     }
   }
 
@@ -114,7 +108,7 @@ class _MyAppState extends State<MyApp> {
     String datePref = prefs.getString('date');
     DateTime today = DateTime.now();
     DateTime datePrefParse = DateTime.parse(datePref);
-    if (datePrefParse.difference(today) == 0) {
+    if (datePrefParse.difference(today).inDays == 0) {
       dateDiff = false;
     } else {
       dateDiff = true;
@@ -122,10 +116,9 @@ class _MyAppState extends State<MyApp> {
   }
 
   @override
-  void didUpdateWidget(MyApp oldWidget) {
-    // TODO: implement didUpdateWidget
-    print("CHECK : " + user.userName);
-    super.didUpdateWidget(oldWidget);
+  void initState() {
+    checkUser();
+    super.initState();
   }
 
   @override
@@ -137,7 +130,7 @@ class _MyAppState extends State<MyApp> {
       ),
       routes: {
         '/': (BuildContext context) {
-          if (user != null) {
+          if (userPref) {
             if (dateDiff) {
               return DailyMoodPage(moods);
             } else {
@@ -182,12 +175,5 @@ class _MyAppState extends State<MyApp> {
         return null;
       },
     );
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    checkUser();
   }
 }
