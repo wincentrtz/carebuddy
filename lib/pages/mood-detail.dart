@@ -1,6 +1,34 @@
 import 'package:flutter/material.dart';
+import '../models/mood-trend.dart';
 
 class MoodDetailPage extends StatelessWidget {
+  MoodTrend moodTrend;
+
+  MoodDetailPage(this.moodTrend);
+
+  List<String> months = [
+    'JANUARI',
+    'FEBRUARY',
+    'MARCH',
+    'APRIL',
+    'MAY',
+    'JUNE',
+    'JULY',
+    'AUGUST',
+    'SEPTEMBER',
+    'OCTOBER',
+    'NOVEMBER',
+    'DECEMBER'
+  ];
+
+  Map<String, Color> colorMoodTrend = {
+    'Amazing': Color(0xFFffd11f),
+    'Good': Color(0xFF3b8740),
+    'So-So': Color(0xFF73c176),
+    'A bit gloomy': Color(0xFF4e8cc9),
+    'Stressed': Color(0xFF99999a),
+  };
+
   @override
   Widget build(BuildContext context) {
     final double deviceWidth = MediaQuery.of(context).size.width;
@@ -13,7 +41,7 @@ class MoodDetailPage extends StatelessWidget {
             Container(
               width: deviceWidth,
               decoration: BoxDecoration(
-                color: Color(0xFF73c176),
+                color: colorMoodTrend[moodTrend.dailyMoodLabel],
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,7 +68,7 @@ class MoodDetailPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          '28',
+                          moodTrend.dailyMoodDate.day.toString(),
                           style: TextStyle(
                             fontSize: 56.0,
                             fontWeight: FontWeight.bold,
@@ -48,7 +76,7 @@ class MoodDetailPage extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          'DECEMBER',
+                          months[moodTrend.dailyMoodDate.month - 1],
                           style: TextStyle(
                             fontSize: 32.0,
                             color: Colors.white,
@@ -56,7 +84,7 @@ class MoodDetailPage extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          '2018',
+                          moodTrend.dailyMoodDate.year.toString(),
                           style: TextStyle(
                             fontSize: 32.0,
                             color: Colors.white,
@@ -75,11 +103,11 @@ class MoodDetailPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    'BBQ PARTY',
+                    moodTrend.dailyMoodTitle,
                     style: TextStyle(
                       fontSize: 32.0,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF73c176),
+                      color: colorMoodTrend[moodTrend.dailyMoodLabel],
                     ),
                     textAlign: TextAlign.left,
                   ),
@@ -87,7 +115,7 @@ class MoodDetailPage extends StatelessWidget {
                     height: 20.0,
                   ),
                   Text(
-                    'Today, my friends and I are having a late Christmas BBQ party. Havenʼt met them for quite some time. Pretty fun.',
+                    moodTrend.dailyMoodDescription,
                     style: TextStyle(
                       fontSize: 18.0,
                     ),

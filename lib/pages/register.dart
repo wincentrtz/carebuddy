@@ -102,7 +102,7 @@ class _RegisterPageState extends State<RegisterPage> {
           json.decode(responseUserData.body);
       widget.setUserAccount(_registerTempData, responseUserDataDecode['name']);
       Navigator.of(context).pop();
-      Navigator.pushReplacementNamed(context, '/home');
+      Navigator.pushReplacementNamed(context, '/daily-mood');
     } else {}
   }
 
@@ -113,7 +113,7 @@ class _RegisterPageState extends State<RegisterPage> {
       builder: (BuildContext context) {
         // return object of type Dialog
         return AlertDialog(
-          content: Text("Submitting Report..."),
+          content: Text("Creating Account..."),
           actions: <Widget>[],
         );
       },

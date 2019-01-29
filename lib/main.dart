@@ -5,6 +5,7 @@ import 'dart:convert';
 
 import './models/mood.dart';
 import './models/user.dart';
+import './models/mood-trend.dart';
 
 import './pages/login.dart';
 import './pages/register.dart';
@@ -67,6 +68,7 @@ class _MyAppState extends State<MyApp> {
   ];
 
   User user;
+  List<MoodTrend> moodTrends;
   bool dateDiff;
   bool userPref = false;
 
@@ -115,6 +117,32 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
+  void getMoodTrendPreferences() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userId = prefs.getString('userId');
+    var responseMoodTrendData = await http.get(
+        'https://care-buddy-793cb.firebaseio.com/moods/' + userId + '/.json');
+
+    final Map<String, dynamic> moodTrendBody =
+        json.decode(responseMoodTrendData.body);
+
+    final newMoodTrends = new List<MoodTrend>();
+    moodTrendBody.forEach((String randomId, dynamic userData) {
+      final MoodTrend temp = new MoodTrend(
+        DateTime.parse(userData['dailyMoodDate']),
+        userData['dailyMoodDescription'],
+        userData['dailyMoodIcon'],
+        userData['dailyMoodLabel'],
+        userData['dailyMoodTitle'],
+      );
+      newMoodTrends.add(temp);
+    });
+
+    setState(() {
+      moodTrends = newMoodTrends;
+    });
+  }
+
   @override
   void initState() {
     checkUser();
@@ -144,10 +172,10 @@ class _MyAppState extends State<MyApp> {
         '/daily-mood': (BuildContext context) => DailyMoodPage(moods),
         '/home': (BuildContext context) =>
             HomePage(user, setUserAccount, checkUser),
-        '/mood': (BuildContext context) => MoodPage(),
+        '/mood': (BuildContext context) =>
+            MoodPage(moodTrends, getMoodTrendPreferences),
         '/task': (BuildContext context) => TaskPage(),
         '/add-task': (BuildContext context) => AddTaskPage(),
-        '/mood-detail': (BuildContext context) => MoodDetailPage(),
         '/article': (BuildContext context) => ArticlePage(articles, articleOld),
         '/support': (BuildContext context) => SupportPage(),
         '/support-detail': (BuildContext context) => SupportDetailPage(),
@@ -165,11 +193,11 @@ class _MyAppState extends State<MyApp> {
             builder: (BuildContext context) =>
                 ArticleDetailPage(articles[index], index),
           );
-        } else if (pathElements[1] == 'daily-mood-detail') {
+        } else if (pathElements[1] == 'mood-detail') {
           final int index = int.parse(pathElements[2]);
           return MaterialPageRoute(
             builder: (BuildContext context) =>
-                ArticleDetailPage(articles[index], index),
+                MoodDetailPage(moodTrends[index]),
           );
         }
         return null;

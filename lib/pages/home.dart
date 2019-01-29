@@ -4,7 +4,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-import './mood.dart';
 import './task.dart';
 import '../models/user.dart';
 
@@ -53,7 +52,6 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final double deviceHeigth = MediaQuery.of(context).size.height;
     final double deviceWidth = MediaQuery.of(context).size.width;
-    // TODO: implement build
     return Scaffold(
       body: Container(
         padding: EdgeInsets.only(top: 60.0),
@@ -61,10 +59,9 @@ class _HomePageState extends State<HomePage> {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
-            end: Alignment(
-                0.8, 0.0), // 10% of the width, so there are ten blinds.
-            colors: [Color(0xFF25263b), Color(0xFF267EA0)], // whitish to gray
-            tileMode: TileMode.clamp, // repeats the gradient over the canvas
+            end: Alignment(0.8, 0.0),
+            colors: [Color(0xFF25263b), Color(0xFF267EA0)],
+            tileMode: TileMode.clamp,
           ),
         ),
         child: widget.user == null
@@ -170,36 +167,7 @@ class _HomePageState extends State<HomePage> {
                     height: 40.0,
                   ),
                   GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        PageRouteBuilder(
-                          pageBuilder: (BuildContext context,
-                              Animation<double> animation,
-                              Animation<double> secondaryAnimation) {
-                            return MoodPage();
-                          },
-                          transitionsBuilder: (BuildContext context,
-                              Animation<double> animation,
-                              Animation<double> secondaryAnimation,
-                              Widget child) {
-                            return SlideTransition(
-                              position: new Tween<Offset>(
-                                begin: const Offset(1.0, 0.0),
-                                end: Offset.zero,
-                              ).animate(animation),
-                              child: new SlideTransition(
-                                position: new Tween<Offset>(
-                                  begin: Offset.zero,
-                                  end: const Offset(0.0, 1.0),
-                                ).animate(secondaryAnimation),
-                                child: child,
-                              ),
-                            );
-                          },
-                        ),
-                      );
-                    },
+                    onTap: () => Navigator.pushNamed(context, '/mood'),
                     child: Container(
                       padding: EdgeInsets.only(
                         top: 10.0,
