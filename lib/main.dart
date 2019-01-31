@@ -7,6 +7,7 @@ import './models/mood.dart';
 import './models/user.dart';
 import './models/mood-trend.dart';
 import './models/task.dart';
+import './models/task-detail.dart';
 
 import './pages/login.dart';
 import './pages/register.dart';
@@ -199,7 +200,24 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-  void getUserDetailTask() async {}
+  _createTaskDetail(Map<String, dynamic> taskDetail, String taskId) async {
+    print(taskDetail['taskDate']);
+    var responseTaskDetail = await http.post(
+      'https://care-buddy-793cb.firebaseio.com/detail-task/' +
+          taskId +
+          '/' +
+          taskDetail["taskDate"] +
+          '/.json',
+      body: json.encode(taskDetail),
+    );
+
+    final Map<String, dynamic> responseTaskDetailDecode =
+        json.decode(responseTaskDetail.body);
+
+    TaskDetail temp = new TaskDetail();
+    temp.id = responseTaskDetailDecode["name"];
+    temp.taskName = taskDetail["taskTitle"];
+  }
 
   @override
   void initState() {
@@ -268,7 +286,8 @@ class _MyAppState extends State<MyApp> {
           );
         } else if (pathElements[1] == 'add-task' && pathElements[2] != null) {
           return MaterialPageRoute(
-            builder: (BuildContext context) => AddTaskPage(pathElements[2]),
+            builder: (BuildContext context) =>
+                AddTaskPage(pathElements[2], _createTaskDetail),
           );
         }
         return null;
