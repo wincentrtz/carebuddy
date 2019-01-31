@@ -14,6 +14,7 @@ import './pages/home.dart';
 import './pages/mood.dart';
 import './pages/task.dart';
 import './pages/add-task.dart';
+import './pages/add-task-detail.dart';
 import './pages/mood-detail.dart';
 import './pages/article.dart';
 import './pages/article-detail.dart';
@@ -176,6 +177,7 @@ class _MyAppState extends State<MyApp> {
             MoodPage(moodTrends, getMoodTrendPreferences),
         '/task': (BuildContext context) => TaskPage(),
         '/add-task': (BuildContext context) => AddTaskPage(),
+        '/add-task-detail': (BuildContext context) => AddTaskDetailPage(),
         '/article': (BuildContext context) => ArticlePage(articles, articleOld),
         '/support': (BuildContext context) => SupportPage(),
         '/support-detail': (BuildContext context) => SupportDetailPage(),

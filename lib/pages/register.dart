@@ -208,8 +208,6 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Widget build(BuildContext context) {
-    // TODO: implement build
-    final double deviceWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       body: Container(
         child: SingleChildScrollView(

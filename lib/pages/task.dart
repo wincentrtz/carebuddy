@@ -180,10 +180,8 @@ class _TaskPageState extends State<TaskPage> {
             Container(
               alignment: Alignment.center,
               child: FloatingActionButton(
-                onPressed: () async {
-                  final result =
-                      await Navigator.pushNamed(context, '/add-task');
-                  if (result == 'add') {}
+                onPressed: () {
+                  Navigator.pushNamed(context, '/add-task-detail');
                 },
                 backgroundColor: Color(0xFF09a24a),
                 child: Icon(Icons.add),
