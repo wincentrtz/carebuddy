@@ -57,6 +57,10 @@ flutter:
     - assets/gloomy.png
     - assets/sad.png
     - assets/good-small.png
+    - assets/amazing-small.png
+    - assets/so-small.png
+    - assets/gloomy-small.png
+    - assets/sad-small.png
     - assets/setting.png
     - assets/circle.png
     - assets/check.png

@@ -4,7 +4,13 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
+import '../models/task.dart';
+
 class AddTaskDetailPage extends StatefulWidget {
+  Task task;
+
+  AddTaskDetailPage({this.task});
+
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -90,25 +96,33 @@ class _AddTaskDetailPageState extends State<AddTaskDetailPage> {
                     child: Icon(
                       Icons.keyboard_arrow_left,
                       size: 60.0,
-                      color: Color(0xFF09a24a),
+                      color: widget.task == null
+                          ? Color(0xFF09a24a)
+                          : Color(
+                              widget.task.generateColorFromString(
+                                  widget.task.taskColorTheme),
+                            ),
                     ),
                   ),
                   Container(
-                      margin: EdgeInsets.only(
-                        right: 40,
-                      ),
-                      child: GestureDetector(
-                        onTap: () {
-                          _addTaskDetailFormKey.currentState.save();
-                          _createTaskHeader();
-                        },
-                        child: Text(
-                          'Apply',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      )),
+                    margin: EdgeInsets.only(
+                      right: 40,
+                    ),
+                    child: GestureDetector(
+                      onTap: () {
+                        _addTaskDetailFormKey.currentState.save();
+                        _createTaskHeader();
+                      },
+                      child: widget.task == null
+                          ? Text(
+                              'Apply',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            )
+                          : Container(),
+                    ),
+                  ),
                 ],
               ),
               SizedBox(
@@ -127,6 +141,8 @@ class _AddTaskDetailPageState extends State<AddTaskDetailPage> {
                           fontSize: 20.0,
                         ),
                       ),
+                      initialValue:
+                          widget.task == null ? "" : widget.task.taskTitle,
                       maxLines: 2,
                       style: TextStyle(
                         fontSize: 30.0,
@@ -159,7 +175,12 @@ class _AddTaskDetailPageState extends State<AddTaskDetailPage> {
                           child: Container(
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: currentColor,
+                              color: widget.task == null
+                                  ? currentColor
+                                  : Color(
+                                      widget.task.generateColorFromString(
+                                          widget.task.taskColorTheme),
+                                    ),
                             ),
                             width: 30.0,
                             height: 30.0,
@@ -174,11 +195,18 @@ class _AddTaskDetailPageState extends State<AddTaskDetailPage> {
           ),
         ),
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () => Navigator.pushNamed(context, '/add-task'),
-      //   backgroundColor: Color(0xFF09a24a),
-      //   child: Icon(Icons.add),
-      // ),
+      floatingActionButton: widget.task == null
+          ? Container()
+          : FloatingActionButton(
+              onPressed: () => Navigator.pushNamed(context, '/add-task'),
+              backgroundColor: widget.task == null
+                  ? Color(0xFF09a24a)
+                  : Color(
+                      widget.task
+                          .generateColorFromString(widget.task.taskColorTheme),
+                    ),
+              child: Icon(Icons.add),
+            ),
     );
   }
 }

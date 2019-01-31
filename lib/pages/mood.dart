@@ -165,6 +165,7 @@ class _MoodPageState extends State<MoodPage> {
             widget.moodTrends == null
                 ? Column(
                     mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       CircularProgressIndicator(
                         valueColor:

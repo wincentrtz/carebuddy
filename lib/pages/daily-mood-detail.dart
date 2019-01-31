@@ -46,6 +46,7 @@ class _DailyMoodDetailPageState extends State<DailyMoodDetailPage> {
       Navigator.of(context).pop();
 
       datePref.setString('date', date.toString());
+      datePref.setString('moodIcon', widget._mood.moodImageUrl);
       Navigator.pushReplacementNamed(context, '/home');
     } else {
       print(response.statusCode);
@@ -126,13 +127,16 @@ class _DailyMoodDetailPageState extends State<DailyMoodDetailPage> {
                     margin: EdgeInsets.symmetric(horizontal: 20.0),
                     padding: EdgeInsets.all(15.0),
                     decoration: BoxDecoration(
-                      color: Colors.grey,
+                      color:
+                          widget._mood.hexToColor(widget._mood.moodColorTheme),
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     child: Text(
                       'What\'s happening at the moment?',
                       style: TextStyle(
                         fontSize: 16,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),

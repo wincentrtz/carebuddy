@@ -6,6 +6,7 @@ import 'dart:convert';
 import './models/mood.dart';
 import './models/user.dart';
 import './models/mood-trend.dart';
+import './models/task.dart';
 
 import './pages/login.dart';
 import './pages/register.dart';
@@ -70,6 +71,7 @@ class _MyAppState extends State<MyApp> {
 
   User user;
   List<MoodTrend> moodTrends;
+  List<Task> taskHeaders;
   bool dateDiff;
   bool userPref = false;
 
@@ -144,6 +146,30 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  void getUserHeaderTask() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userId = prefs.getString('userId');
+    var responseMoodTrendData = await http.get(
+        'https://care-buddy-793cb.firebaseio.com/header-task/' +
+            userId +
+            '/.json');
+    final Map<String, dynamic> moodTaskHeaderBody =
+        json.decode(responseMoodTrendData.body);
+
+    print(moodTaskHeaderBody);
+    final newMoodTaskHeader = new List<Task>();
+    moodTaskHeaderBody.forEach((String randomId, dynamic userData) {
+      final Task temp = new Task();
+      temp.taskTitle = userData['taskTitle'];
+      temp.taskColorTheme = userData['taskColorTheme'];
+      newMoodTaskHeader.add(temp);
+    });
+
+    setState(() {
+      taskHeaders = newMoodTaskHeader;
+    });
+  }
+
   @override
   void initState() {
     checkUser();
@@ -175,7 +201,8 @@ class _MyAppState extends State<MyApp> {
             HomePage(user, setUserAccount, checkUser),
         '/mood': (BuildContext context) =>
             MoodPage(moodTrends, getMoodTrendPreferences),
-        '/task': (BuildContext context) => TaskPage(),
+        '/task': (BuildContext context) =>
+            TaskPage(taskHeaders, getUserHeaderTask),
         '/add-task': (BuildContext context) => AddTaskPage(),
         '/add-task-detail': (BuildContext context) => AddTaskDetailPage(),
         '/article': (BuildContext context) => ArticlePage(articles, articleOld),
@@ -200,6 +227,13 @@ class _MyAppState extends State<MyApp> {
           return MaterialPageRoute(
             builder: (BuildContext context) =>
                 MoodDetailPage(moodTrends[index]),
+          );
+        } else if (pathElements[1] == 'task-header' &&
+            pathElements[2] != null) {
+          final int index = int.parse(pathElements[2]);
+          return MaterialPageRoute(
+            builder: (BuildContext context) =>
+                AddTaskDetailPage(task: taskHeaders[index]),
           );
         }
         return null;

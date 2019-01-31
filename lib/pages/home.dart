@@ -9,6 +9,7 @@ import '../models/user.dart';
 
 class HomePage extends StatefulWidget {
   User user;
+  String moodUrl;
   Function setUserAccount;
   Function checkUser;
 
@@ -27,8 +28,8 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     // TODO: implement initState
     if (widget.user == null) {
-      _getUserPreferences();
       setState(() {
+        _getUserPreferences();
         isLoading = false;
       });
     }
@@ -118,7 +119,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                           Container(
                             child: Image.asset(
-                              'assets/good-small.png',
+                              "assets/sad-small.png",
                               width: 40.0,
                             ),
                           ),
@@ -204,36 +205,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        PageRouteBuilder(
-                          pageBuilder: (BuildContext context,
-                              Animation<double> animation,
-                              Animation<double> secondaryAnimation) {
-                            return TaskPage();
-                          },
-                          transitionsBuilder: (BuildContext context,
-                              Animation<double> animation,
-                              Animation<double> secondaryAnimation,
-                              Widget child) {
-                            return SlideTransition(
-                              position: new Tween<Offset>(
-                                begin: const Offset(1.0, 0.0),
-                                end: Offset.zero,
-                              ).animate(animation),
-                              child: new SlideTransition(
-                                position: new Tween<Offset>(
-                                  begin: Offset.zero,
-                                  end: const Offset(0.0, 1.0),
-                                ).animate(secondaryAnimation),
-                                child: child,
-                              ),
-                            );
-                          },
-                        ),
-                      );
-                    },
+                    onTap: () => Navigator.pushNamed(context, '/task'),
                     child: Container(
                       padding: EdgeInsets.only(
                         top: 10.0,
