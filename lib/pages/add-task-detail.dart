@@ -8,8 +8,9 @@ import '../models/task.dart';
 
 class AddTaskDetailPage extends StatefulWidget {
   Task task;
+  Function addTaskHeader;
 
-  AddTaskDetailPage({this.task});
+  AddTaskDetailPage({this.addTaskHeader, this.task});
 
   @override
   State<StatefulWidget> createState() {
@@ -34,17 +35,18 @@ class _AddTaskDetailPageState extends State<AddTaskDetailPage> {
     setState(() => pickerColor = color);
   }
 
-  _createTaskHeader() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String userId = prefs.getString('userId');
-
-    await http.post(
-        'https://care-buddy-793cb.firebaseio.com/header-task/' +
-            userId +
-            '/.json',
-        body: json.encode(task));
-
-    Navigator.pop(context);
+  void _showDialogCreate() {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          content: Text("Adding New Task..."),
+          actions: <Widget>[],
+        );
+      },
+    );
   }
 
   void _showDialog() {
@@ -110,8 +112,13 @@ class _AddTaskDetailPageState extends State<AddTaskDetailPage> {
                     ),
                     child: GestureDetector(
                       onTap: () {
-                        _addTaskDetailFormKey.currentState.save();
-                        _createTaskHeader();
+                        _showDialogCreate();
+                        Future.delayed(const Duration(milliseconds: 500), () {
+                          _addTaskDetailFormKey.currentState.save();
+                          widget.addTaskHeader(task);
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                        });
                       },
                       child: widget.task == null
                           ? Text(
@@ -198,7 +205,8 @@ class _AddTaskDetailPageState extends State<AddTaskDetailPage> {
       floatingActionButton: widget.task == null
           ? Container()
           : FloatingActionButton(
-              onPressed: () => Navigator.pushNamed(context, '/add-task'),
+              onPressed: () => Navigator.pushNamed(
+                  context, '/add-task/' + widget.task.id.toString()),
               backgroundColor: widget.task == null
                   ? Color(0xFF09a24a)
                   : Color(

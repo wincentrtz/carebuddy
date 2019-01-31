@@ -4,6 +4,7 @@ class Mood {
   final String moodLabel;
   final String moodImageUrl;
   final String moodColorTheme;
+  List<String> moodDetail;
 
   Mood({
     @required this.moodLabel,

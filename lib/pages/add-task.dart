@@ -3,6 +3,9 @@ import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 
 class AddTaskPage extends StatefulWidget {
+  String taskHeader;
+
+  AddTaskPage(this.taskHeader);
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -22,6 +25,13 @@ class _AddTaskPageState extends State<AddTaskPage> {
   InputType inputType = InputType.both;
   bool editable = true;
   DateTime date;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    print(widget.taskHeader);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

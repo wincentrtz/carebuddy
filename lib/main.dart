@@ -160,6 +160,7 @@ class _MyAppState extends State<MyApp> {
     final newMoodTaskHeader = new List<Task>();
     moodTaskHeaderBody.forEach((String randomId, dynamic userData) {
       final Task temp = new Task();
+      temp.id = randomId;
       temp.taskTitle = userData['taskTitle'];
       temp.taskColorTheme = userData['taskColorTheme'];
       newMoodTaskHeader.add(temp);
@@ -169,6 +170,36 @@ class _MyAppState extends State<MyApp> {
       taskHeaders = newMoodTaskHeader;
     });
   }
+
+  _createTaskHeader(Map<String, dynamic> task) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userId = prefs.getString('userId');
+
+    var responseTaskHeader = await http.post(
+      'https://care-buddy-793cb.firebaseio.com/header-task/' +
+          userId +
+          '/.json',
+      body: json.encode(task),
+    );
+
+    final Map<String, dynamic> responseTaskHeaderDecode =
+        json.decode(responseTaskHeader.body);
+
+    print(responseTaskHeaderDecode.toString());
+    Task temp = new Task();
+    temp.id = responseTaskHeaderDecode["name"];
+    temp.taskTitle = task["taskTitle"];
+    temp.taskColorTheme = task["taskColorTheme"];
+
+    List<Task> newTask = taskHeaders;
+    newTask.add(temp);
+
+    setState(() {
+      taskHeaders = newTask;
+    });
+  }
+
+  void getUserDetailTask() async {}
 
   @override
   void initState() {
@@ -203,8 +234,8 @@ class _MyAppState extends State<MyApp> {
             MoodPage(moodTrends, getMoodTrendPreferences),
         '/task': (BuildContext context) =>
             TaskPage(taskHeaders, getUserHeaderTask),
-        '/add-task': (BuildContext context) => AddTaskPage(),
-        '/add-task-detail': (BuildContext context) => AddTaskDetailPage(),
+        '/add-task-detail': (BuildContext context) =>
+            AddTaskDetailPage(addTaskHeader: _createTaskHeader),
         '/article': (BuildContext context) => ArticlePage(articles, articleOld),
         '/support': (BuildContext context) => SupportPage(),
         '/support-detail': (BuildContext context) => SupportDetailPage(),
@@ -234,6 +265,10 @@ class _MyAppState extends State<MyApp> {
           return MaterialPageRoute(
             builder: (BuildContext context) =>
                 AddTaskDetailPage(task: taskHeaders[index]),
+          );
+        } else if (pathElements[1] == 'add-task' && pathElements[2] != null) {
+          return MaterialPageRoute(
+            builder: (BuildContext context) => AddTaskPage(pathElements[2]),
           );
         }
         return null;
