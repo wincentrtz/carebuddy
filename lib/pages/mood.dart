@@ -47,7 +47,6 @@ class _MoodPageState extends State<MoodPage> {
   }
 
   Widget _buildMoodTrendList(context, index) {
-    final double deviceWidth = MediaQuery.of(context).size.width;
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 48.0),
       child: GestureDetector(
@@ -172,9 +171,11 @@ class _MoodPageState extends State<MoodPage> {
                     )
                   : ListView.builder(
                       shrinkWrap: true,
-                      physics: const AlwaysScrollableScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
                       itemBuilder: _buildMoodTrendList,
-                      itemCount: widget.moodTrends.length,
+                      itemCount: widget.moodTrends.length > 5
+                          ? 5
+                          : widget.moodTrends.length,
                     ),
               GestureDetector(
                 onTap: () => Navigator.pushNamed(context, '/mood-trend'),

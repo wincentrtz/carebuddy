@@ -141,7 +141,7 @@ class _MyAppState extends State<MyApp> {
     });
 
     setState(() {
-      moodTrends = newMoodTrends;
+      moodTrends = newMoodTrends.reversed.toList();
     });
   }
 
@@ -281,7 +281,7 @@ class _MyAppState extends State<MyApp> {
       ),
       routes: {
         '/': (BuildContext context) {
-          if (!userPref) {
+          if (userPref) {
             if (dateDiff) {
               return DailyMoodPage(moods);
             } else {

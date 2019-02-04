@@ -31,6 +31,7 @@ class _LoginPageState extends State<LoginPage> {
     String dateCheck = datePref.getString('date');
     DateTime today;
     DateTime check;
+    _showDialog('Loging In....');
     var response = await http.post(
       'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyArBu7wlB07jsIYDMn8qPR8kVCMujzMqUw',
       body: json.encode(
@@ -71,7 +72,33 @@ class _LoginPageState extends State<LoginPage> {
       } else {
         Navigator.pushReplacementNamed(context, '/daily-mood');
       }
+    } else {
+      Navigator.pop(context);
+      _showDialog('Login Failed');
     }
+  }
+
+  void _showDialog(String value) {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          content: Text(value),
+          actions: <Widget>[
+            value == "Login Failed"
+                ? FlatButton(
+                    child: Text('Dismiss'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  )
+                : Container(),
+          ],
+        );
+      },
+    );
   }
 
   Widget build(BuildContext context) {
@@ -83,7 +110,7 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             children: <Widget>[
               Container(
-                margin: EdgeInsets.only(top: deviceHeigth * 0.30, bottom: 10),
+                margin: EdgeInsets.only(top: deviceHeigth * 0.30, bottom: 20),
                 child: Column(
                   children: <Widget>[
                     Text(
@@ -136,7 +163,7 @@ class _LoginPageState extends State<LoginPage> {
                     borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(15.0),
                         topRight: Radius.circular(15.0))),
-                padding: EdgeInsets.symmetric(horizontal: 48.0, vertical: 16.0),
+                padding: EdgeInsets.symmetric(horizontal: 48.0, vertical: 24.0),
                 child: Form(
                   key: _loginKey,
                   child: Column(

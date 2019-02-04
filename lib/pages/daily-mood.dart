@@ -66,56 +66,55 @@ class DailyMoodPage extends StatelessWidget {
   }
 
   Widget build(BuildContext context) {
-    final double deviceWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment(
-                0.8, 0.0), // 10% of the width, so there are ten blinds.
-            colors: [Color(0xFF25263b), Color(0xFF267EA0)], // whitish to gray
-            tileMode: TileMode.clamp, // repeats the gradient over the canvas
-          ),
-        ),
-        width: deviceWidth,
-        padding: EdgeInsets.all(10.0),
+      body: SingleChildScrollView(
         child: Container(
-          width: deviceWidth * 0.8,
-          margin: EdgeInsets.all(20),
           decoration: BoxDecoration(
-              color: Colors.white, borderRadius: BorderRadius.circular(20.0)),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              SizedBox(
-                height: 20.0,
-              ),
-              Text(
-                'Tell us how ',
-                style: TextStyle(
-                  fontSize: 28.0,
-                  fontWeight: FontWeight.bold,
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment(
+                  0.8, 0.0), // 10% of the width, so there are ten blinds.
+              colors: [Color(0xFF25263b), Color(0xFF267EA0)], // whitish to gray
+              tileMode: TileMode.clamp, // repeats the gradient over the canvas
+            ),
+          ),
+          padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 30.0),
+          child: Container(
+            margin: EdgeInsets.all(20),
+            decoration: BoxDecoration(
+                color: Colors.white, borderRadius: BorderRadius.circular(20.0)),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(
+                  height: 20.0,
                 ),
-                textAlign: TextAlign.left,
-              ),
-              Text(
-                'you feel today!',
-                style: TextStyle(
-                  fontSize: 28.0,
-                  fontWeight: FontWeight.bold,
+                Text(
+                  'Tell us how ',
+                  style: TextStyle(
+                    fontSize: 28.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.left,
                 ),
-                textAlign: TextAlign.left,
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 40.0),
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemBuilder: _buildMoodListTile,
-                  itemCount: _moods.length,
+                Text(
+                  'you feel today!',
+                  style: TextStyle(
+                    fontSize: 28.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.left,
                 ),
-              )
-            ],
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 40.0),
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemBuilder: _buildMoodListTile,
+                    itemCount: _moods.length,
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),

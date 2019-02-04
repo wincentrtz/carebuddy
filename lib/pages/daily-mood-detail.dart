@@ -75,6 +75,7 @@ class _DailyMoodDetailPageState extends State<DailyMoodDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    final deviceWidth = MediaQuery.of(context).size.width;
     // TODO: implement build
     return Scaffold(
       body: SingleChildScrollView(
@@ -136,6 +137,7 @@ class _DailyMoodDetailPageState extends State<DailyMoodDetailPage> {
                           widget._mood.hexToColor(widget._mood.moodColorTheme),
                       borderRadius: BorderRadius.circular(10.0),
                     ),
+                    width: deviceWidth,
                     child: Text(
                       'What\'s happening at the moment?',
                       style: TextStyle(

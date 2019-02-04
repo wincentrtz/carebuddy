@@ -28,10 +28,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     // TODO: implement initState
     if (widget.user == null) {
-      setState(() {
-        _getUserPreferences();
-        isLoading = false;
-      });
+      _getUserPreferences();
     }
     super.initState();
   }
@@ -48,6 +45,9 @@ class _HomePageState extends State<HomePage> {
       userUniqueId = randomId;
     });
     widget.setUserAccount(usersData, userUniqueId);
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
