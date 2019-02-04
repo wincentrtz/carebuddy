@@ -39,6 +39,7 @@ class _HomePageState extends State<HomePage> {
   void _getUserPreferences() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String userId = prefs.getString('userId');
+    widget.moodUrl = prefs.getString('moodIcon');
     var responseUserData = await http
         .get('https://care-buddy-793cb.firebaseio.com/' + userId + '/.json');
     final Map<String, dynamic> usersData = json.decode(responseUserData.body);
@@ -119,7 +120,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                           Container(
                             child: Image.asset(
-                              "assets/sad-small.png",
+                              "assets/amazing-small.png",
                               width: 40.0,
                             ),
                           ),

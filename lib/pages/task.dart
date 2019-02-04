@@ -7,6 +7,8 @@ class TaskPage extends StatefulWidget {
 
   TaskPage(this.taskHeaders, this.getUserHeaderTask);
 
+  List<String> keys;
+
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -19,11 +21,22 @@ class _TaskPageState extends State<TaskPage> {
   bool _isChecked = false;
   bool _snackbar = false;
 
+  DateTime today = DateTime.now();
+
+  var todayKey;
+
+  var keys = [];
+
   @override
   void initState() {
     // TODO: implement initState
 
     if (widget.taskHeaders == null) {
+      todayKey = today.year.toString() +
+          '-' +
+          today.month.toString() +
+          '-' +
+          today.day.toString();
       widget.getUserHeaderTask();
     }
     super.initState();
@@ -33,6 +46,56 @@ class _TaskPageState extends State<TaskPage> {
     setState(() {
       _isChecked = !_isChecked;
     });
+  }
+
+  Widget _buildTaskList(context, index, k) {
+    return widget.taskHeaders[index].taskDetails['0-daily'][k] != null
+        ? Column(
+            children: <Widget>[
+              SizedBox(
+                height: 5.0,
+              ),
+              Row(
+                children: <Widget>[
+                  Stack(
+                    alignment: const Alignment(-1.2, 1.2),
+                    children: [
+                      GestureDetector(
+                        onTap: _toggleFavorite,
+                        child: CircleAvatar(
+                          backgroundImage: AssetImage('assets/circle.png'),
+                          radius: 15.0,
+                          backgroundColor: Colors.transparent,
+                        ),
+                      ),
+                      (_isChecked
+                          ? GestureDetector(
+                              onTap: _toggleFavorite,
+                              child: Container(
+                                child: Image.asset(
+                                  'assets/check.png',
+                                  width: 30.0,
+                                ),
+                              ),
+                            )
+                          : Container()),
+                    ],
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text(
+                    widget
+                        .taskHeaders[index].taskDetails['0-daily'][0].taskName,
+                    style: TextStyle(
+                      fontSize: 16.0,
+                    ),
+                  )
+                ],
+              ),
+            ],
+          )
+        : Container();
   }
 
   Widget _buildTaskCard(context, index) {
@@ -77,44 +140,15 @@ class _TaskPageState extends State<TaskPage> {
                     height: 20.0,
                   ),
                 ],
+              ),
+              ListView.builder(
+                shrinkWrap: true,
+                itemBuilder: (ctxt, idx) => _buildTaskList(ctxt, idx, index),
+                itemCount: widget.taskHeaders[index].taskDetails['0-daily'] !=
+                        null
+                    ? widget.taskHeaders[index].taskDetails['0-daily'].length
+                    : 0,
               )
-              // Row(
-              //   children: <Widget>[
-              //     Stack(
-              //       alignment: const Alignment(-1.2, 1.2),
-              //       children: [
-              //         GestureDetector(
-              //           onTap: _toggleFavorite,
-              //           child: CircleAvatar(
-              //             backgroundImage: AssetImage('assets/circle.png'),
-              //             radius: 15.0,
-              //             backgroundColor: Colors.transparent,
-              //           ),
-              //         ),
-              //         (_isChecked
-              //             ? GestureDetector(
-              //                 onTap: _toggleFavorite,
-              //                 child: Container(
-              //                   child: Image.asset(
-              //                     'assets/check.png',
-              //                     width: 30.0,
-              //                   ),
-              //                 ),
-              //               )
-              //             : Container()),
-              //       ],
-              //     ),
-              //     SizedBox(
-              //       width: 10.0,
-              //     ),
-              //     Text(
-              //       'Morning coffee',
-              //       style: TextStyle(
-              //         fontSize: 16.0,
-              //       ),
-              //     )
-              //   ],
-              // )
             ],
           ),
         ),

@@ -117,8 +117,7 @@ class _DailyMoodDetailPageState extends State<DailyMoodDetailPage> {
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 24.0,
-                          color: widget._mood
-                              .hexToColor(widget._mood.moodColorTheme),
+                          color: Colors.grey,
                         ),
                       ),
                     ],
@@ -145,7 +144,8 @@ class _DailyMoodDetailPageState extends State<DailyMoodDetailPage> {
                         EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
                     padding: EdgeInsets.all(15.0),
                     decoration: BoxDecoration(
-                      color: Colors.grey,
+                      color:
+                          widget._mood.hexToColor(widget._mood.moodColorTheme),
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     child: TextFormField(
@@ -162,7 +162,8 @@ class _DailyMoodDetailPageState extends State<DailyMoodDetailPage> {
                         EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
                     padding: EdgeInsets.all(15.0),
                     decoration: BoxDecoration(
-                      color: Colors.grey,
+                      color:
+                          widget._mood.hexToColor(widget._mood.moodColorTheme),
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     child: TextFormField(

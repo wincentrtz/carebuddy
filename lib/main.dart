@@ -60,14 +60,12 @@ class _MyAppState extends State<MyApp> {
   ];
 
   final List<String> articles = [
-    'Article 1 Title',
-    'Article 2 Title',
+    'Involving Others in Your Caregiving',
+    'Preventing Falls and Fear',
   ];
   final List<String> articleOld = [
-    'Article 4 Title',
-    'Article 5 Title',
-    'Article 6 Title',
-    'Article 7 Title',
+    'Guilt Free Caregiving',
+    'Keeping the Bathroom Safe for Elderly Seniors',
   ];
 
   User user;
@@ -157,15 +155,51 @@ class _MyAppState extends State<MyApp> {
     final Map<String, dynamic> moodTaskHeaderBody =
         json.decode(responseMoodTrendData.body);
 
-    print(moodTaskHeaderBody);
     final newMoodTaskHeader = new List<Task>();
-    moodTaskHeaderBody.forEach((String randomId, dynamic userData) {
-      final Task temp = new Task();
-      temp.id = randomId;
-      temp.taskTitle = userData['taskTitle'];
-      temp.taskColorTheme = userData['taskColorTheme'];
-      newMoodTaskHeader.add(temp);
-    });
+    if (moodTaskHeaderBody != null) {
+      moodTaskHeaderBody.forEach((String randomId, dynamic userData) async {
+        final Task temp = new Task();
+        temp.id = randomId;
+        temp.taskTitle = userData['taskTitle'];
+        temp.taskColorTheme = userData['taskColorTheme'];
+
+        Map<String, List<TaskDetail>> newTaskDetails =
+            new Map<String, List<TaskDetail>>();
+
+        temp.taskDetails = newTaskDetails;
+
+        newMoodTaskHeader.add(temp);
+
+        await Future.wait(newMoodTaskHeader.map((input) async {
+          var responseUserDetailTask = await http.get(
+              'https://care-buddy-793cb.firebaseio.com/detail-task/' +
+                  input.id +
+                  '/.json');
+
+          final Map<String, dynamic> userDetailTaskBody =
+              json.decode(responseUserDetailTask.body);
+
+          Map<String, List<TaskDetail>> newTaskDetails =
+              new Map<String, List<TaskDetail>>();
+
+          if (userDetailTaskBody != null) {
+            userDetailTaskBody
+                .forEach((String randomDetailId, dynamic taskDetail) {
+              String specialId = taskDetail.toString().substring(1, 21);
+              TaskDetail tempo = new TaskDetail();
+              tempo.id = specialId;
+              tempo.taskName = taskDetail[specialId]['taskName'];
+              tempo.taskDate = taskDetail[specialId]['taskDate'];
+              newTaskDetails[randomDetailId] = new List<TaskDetail>();
+              newTaskDetails[randomDetailId].add(tempo);
+            });
+          }
+
+          input.taskDetails = newTaskDetails;
+        }));
+        print(newMoodTaskHeader[0].taskDetails);
+      });
+    }
 
     setState(() {
       taskHeaders = newMoodTaskHeader;
@@ -191,6 +225,7 @@ class _MyAppState extends State<MyApp> {
     temp.id = responseTaskHeaderDecode["name"];
     temp.taskTitle = task["taskTitle"];
     temp.taskColorTheme = task["taskColorTheme"];
+    temp.taskDetails = new Map<String, List<TaskDetail>>();
 
     List<Task> newTask = taskHeaders;
     newTask.add(temp);
@@ -201,7 +236,8 @@ class _MyAppState extends State<MyApp> {
   }
 
   _createTaskDetail(Map<String, dynamic> taskDetail, String taskId) async {
-    print(taskDetail['taskDate']);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userId = prefs.getString('userId');
     var responseTaskDetail = await http.post(
       'https://care-buddy-793cb.firebaseio.com/detail-task/' +
           taskId +
@@ -217,6 +253,17 @@ class _MyAppState extends State<MyApp> {
     TaskDetail temp = new TaskDetail();
     temp.id = responseTaskDetailDecode["name"];
     temp.taskName = taskDetail["taskTitle"];
+    temp.taskDate = taskDetail["taskDate"];
+
+    setState(() {});
+
+    // Map<String, List<TaskDetail>> tempo = taskHeaders[0].taskDetails;
+
+    // tempo[temp.taskDate].add(temp);
+
+    // setState(() {
+    //   taskHeaders[0].taskDetails = tempo;
+    // });
   }
 
   @override

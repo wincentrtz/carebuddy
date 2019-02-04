@@ -29,8 +29,8 @@ class _LoginPageState extends State<LoginPage> {
   void _doLogin() async {
     SharedPreferences datePref = await SharedPreferences.getInstance();
     String dateCheck = datePref.getString('date');
-    DateTime today = DateTime.now();
-    DateTime check = DateTime.parse(dateCheck);
+    DateTime today;
+    DateTime check;
     var response = await http.post(
       'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyArBu7wlB07jsIYDMn8qPR8kVCMujzMqUw',
       body: json.encode(
@@ -61,7 +61,12 @@ class _LoginPageState extends State<LoginPage> {
       });
       widget.setUserAccount(usersData, userUniqueId);
 
-      if (check.difference(today).inDays == 0) {
+      if (dateCheck != null) {
+        check = DateTime.parse(dateCheck);
+        today = DateTime.now();
+      }
+
+      if (dateCheck != null && check.difference(today).inDays == 0) {
         Navigator.pushReplacementNamed(context, '/home');
       } else {
         Navigator.pushReplacementNamed(context, '/daily-mood');

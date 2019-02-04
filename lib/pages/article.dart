@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class ArticlePage extends StatelessWidget {
   @override
@@ -28,12 +29,13 @@ class ArticlePage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(
+                    AutoSizeText(
                       _articles[index],
                       style: TextStyle(
                         fontSize: 20.0,
                         fontWeight: FontWeight.bold,
                       ),
+                      maxLines: 1,
                     ),
                     SizedBox(
                       height: 20.0,
@@ -61,38 +63,44 @@ class ArticlePage extends StatelessWidget {
       margin: EdgeInsets.only(
         top: 0.0,
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Divider(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    _articlesOld[index],
-                    style: TextStyle(
-                      fontSize: 22.0,
-                      fontWeight: FontWeight.bold,
-                    ),
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 40.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Divider(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      AutoSizeText(
+                        _articlesOld[index],
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        maxLines: 2,
+                      ),
+                      Text(
+                        'Description About...',
+                        style: TextStyle(
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
                   ),
-                  Text(
-                    'Description About...',
-                    style: TextStyle(
-                      color: Colors.grey,
-                    ),
-                  ),
-                ],
-              ),
-              Image.asset(
-                'assets/article.jpg',
-                width: 120,
-              ),
-            ],
-          ),
-        ],
+                ),
+                Image.asset(
+                  'assets/article.jpg',
+                  width: 120,
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

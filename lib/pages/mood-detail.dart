@@ -35,96 +35,96 @@ class MoodDetailPage extends StatelessWidget {
     // TODO: implement build
     return Scaffold(
       body: Container(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              width: deviceWidth,
-              decoration: BoxDecoration(
-                color: colorMoodTrend[moodTrend.dailyMoodLabel],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  SizedBox(
-                    height: 40.0,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: Icon(
-                      Icons.keyboard_arrow_left,
-                      size: 60.0,
-                      color: Colors.white,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                width: deviceWidth,
+                decoration: BoxDecoration(
+                  color: colorMoodTrend[moodTrend.dailyMoodLabel],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    SizedBox(
+                      height: 40.0,
                     ),
-                  ),
-                  SizedBox(
-                    height: 20.0,
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(left: 44.0, bottom: 20.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          moodTrend.dailyMoodDate.day.toString(),
-                          style: TextStyle(
-                            fontSize: 56.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Icon(
+                        Icons.keyboard_arrow_left,
+                        size: 60.0,
+                        color: Colors.white,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20.0,
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(left: 44.0, bottom: 20.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            moodTrend.dailyMoodDate.day.toString(),
+                            style: TextStyle(
+                              fontSize: 56.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
                           ),
-                        ),
-                        Text(
-                          months[moodTrend.dailyMoodDate.month - 1],
-                          style: TextStyle(
-                            fontSize: 32.0,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w500,
+                          Text(
+                            months[moodTrend.dailyMoodDate.month - 1],
+                            style: TextStyle(
+                              fontSize: 32.0,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
-                        ),
-                        Text(
-                          moodTrend.dailyMoodDate.year.toString(),
-                          style: TextStyle(
-                            fontSize: 32.0,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w500,
+                          Text(
+                            moodTrend.dailyMoodDate.year.toString(),
+                            style: TextStyle(
+                              fontSize: 32.0,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            Container(
-              margin: EdgeInsets.only(top: 20, left: 40.0, right: 40.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    moodTrend.dailyMoodTitle,
-                    style: TextStyle(
-                      fontSize: 32.0,
-                      fontWeight: FontWeight.bold,
-                      color: colorMoodTrend[moodTrend.dailyMoodLabel],
+              Container(
+                margin: EdgeInsets.only(top: 20, left: 40.0, right: 40.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      moodTrend.dailyMoodTitle,
+                      style: TextStyle(
+                        fontSize: 32.0,
+                        fontWeight: FontWeight.bold,
+                        color: colorMoodTrend[moodTrend.dailyMoodLabel],
+                      ),
+                      textAlign: TextAlign.left,
                     ),
-                    textAlign: TextAlign.left,
-                  ),
-                  SizedBox(
-                    height: 20.0,
-                  ),
-                  Text(
-                    moodTrend.dailyMoodDescription,
-                    style: TextStyle(
-                      fontSize: 18.0,
+                    SizedBox(
+                      height: 20.0,
                     ),
-                  )
-                ],
+                    Text(
+                      moodTrend.dailyMoodDescription,
+                      style: TextStyle(
+                        fontSize: 18.0,
+                      ),
+                    )
+                  ],
+                ),
               ),
-            ),
-            Flexible(
-              child: Column(
+              Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
@@ -158,8 +158,8 @@ class MoodDetailPage extends StatelessWidget {
                   ),
                 ],
               ),
-            )
-          ],
+            ],
+          ),
         ),
       ),
     );
