@@ -83,43 +83,43 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             children: <Widget>[
               Container(
-                  margin: EdgeInsets.only(top: deviceHeigth * 0.30),
-                  height: deviceHeigth * 0.20,
-                  child: Column(
-                    children: <Widget>[
-                      Text(
-                        'SIGN IN',
-                        style: TextStyle(
-                          fontSize: 40.0,
-                          fontWeight: FontWeight.bold,
+                margin: EdgeInsets.only(top: deviceHeigth * 0.30, bottom: 10),
+                child: Column(
+                  children: <Widget>[
+                    Text(
+                      'SIGN IN',
+                      style: TextStyle(
+                        fontSize: 40.0,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF267EA0),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 5.0,
+                      child: new Center(
+                        child: new Container(
+                          margin: EdgeInsets.symmetric(horizontal: 128.0),
+                          height: 2.0,
                           color: Color(0xFF267EA0),
                         ),
                       ),
-                      SizedBox(
-                        height: 5.0,
-                        child: new Center(
-                          child: new Container(
-                            margin: EdgeInsets.symmetric(horizontal: 128.0),
-                            height: 2.0,
-                            color: Color(0xFF267EA0),
-                          ),
-                        ),
+                    ),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    Text(
+                      'A good caregiver is a',
+                    ),
+                    Text(
+                      'Healthy Caregiver',
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        color: Color(0xFF267EA0),
                       ),
-                      SizedBox(
-                        height: 10.0,
-                      ),
-                      Text(
-                        'A good caregiver is a',
-                      ),
-                      Text(
-                        'Healthy Caregiver',
-                        style: TextStyle(
-                          fontSize: 20.0,
-                          color: Color(0xFF267EA0),
-                        ),
-                      )
-                    ],
-                  )),
+                    )
+                  ],
+                ),
+              ),
               Container(
                 decoration: BoxDecoration(
                     gradient: LinearGradient(
@@ -136,8 +136,7 @@ class _LoginPageState extends State<LoginPage> {
                     borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(15.0),
                         topRight: Radius.circular(15.0))),
-                height: deviceHeigth * 0.5,
-                padding: EdgeInsets.symmetric(horizontal: 48.0),
+                padding: EdgeInsets.symmetric(horizontal: 48.0, vertical: 16.0),
                 child: Form(
                   key: _loginKey,
                   child: Column(
@@ -157,6 +156,17 @@ class _LoginPageState extends State<LoginPage> {
                           contentPadding: EdgeInsets.all(15.0),
                           hintText: "Email",
                         ),
+                        keyboardType: TextInputType.emailAddress,
+                        validator: (String value) {
+                          Pattern pattern =
+                              r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                          RegExp regex = new RegExp(pattern);
+                          if (value.isEmpty) {
+                            return 'Email is required';
+                          } else if (!regex.hasMatch(value)) {
+                            return 'Email is not valid';
+                          }
+                        },
                         onSaved: (String value) {
                           _loginTempData['email'] = value;
                         },
@@ -177,6 +187,13 @@ class _LoginPageState extends State<LoginPage> {
                           contentPadding: EdgeInsets.all(15.0),
                           hintText: "Password",
                         ),
+                        validator: (String value) {
+                          if (value.isEmpty) {
+                            return 'Password is required';
+                          } else if (value.length < 6) {
+                            return 'Password must be more than 5 charater';
+                          }
+                        },
                         onSaved: (String value) {
                           _loginTempData['password'] = value;
                         },
@@ -192,7 +209,9 @@ class _LoginPageState extends State<LoginPage> {
                           color: Color(0xFF267EA0),
                           textColor: Colors.white,
                           onPressed: () {
+                            _loginKey.currentState.validate();
                             _loginKey.currentState.save();
+
                             _doLogin();
                           },
                           child: Row(

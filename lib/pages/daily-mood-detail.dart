@@ -68,6 +68,12 @@ class _DailyMoodDetailPageState extends State<DailyMoodDetailPage> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
