@@ -155,7 +155,7 @@ class _MyAppState extends State<MyApp> {
     final Map<String, dynamic> moodTaskHeaderBody =
         json.decode(responseMoodTrendData.body);
 
-    final newMoodTaskHeader = new List<Task>();
+    List<Task> newMoodTaskHeader = new List<Task>();
     if (moodTaskHeaderBody != null) {
       moodTaskHeaderBody.forEach((String randomId, dynamic userData) async {
         final Task temp = new Task();
@@ -163,41 +163,35 @@ class _MyAppState extends State<MyApp> {
         temp.taskTitle = userData['taskTitle'];
         temp.taskColorTheme = userData['taskColorTheme'];
 
-        Map<String, List<TaskDetail>> newTaskDetails =
+        var responseUserDetailTask = await http.get(
+            'https://care-buddy-793cb.firebaseio.com/detail-task/' +
+                temp.id +
+                '/.json');
+
+        final Map<String, dynamic> userDetailTaskBody =
+            json.decode(responseUserDetailTask.body);
+
+        Map<String, List<TaskDetail>> tempNewTaskBodyDetails =
             new Map<String, List<TaskDetail>>();
 
-        temp.taskDetails = newTaskDetails;
-
-        newMoodTaskHeader.add(temp);
-
-        await Future.wait(newMoodTaskHeader.map((input) async {
-          var responseUserDetailTask = await http.get(
-              'https://care-buddy-793cb.firebaseio.com/detail-task/' +
-                  input.id +
-                  '/.json');
-
-          final Map<String, dynamic> userDetailTaskBody =
-              json.decode(responseUserDetailTask.body);
-
-          Map<String, List<TaskDetail>> newTaskDetails =
-              new Map<String, List<TaskDetail>>();
-
-          if (userDetailTaskBody != null) {
-            userDetailTaskBody
-                .forEach((String randomDetailId, dynamic taskDetail) {
-              String specialId = taskDetail.toString().substring(1, 21);
+        if (userDetailTaskBody != null) {
+          userDetailTaskBody.forEach((String randomId, dynamic taskDetails) {
+            Map<String, dynamic> mapUserDetail = taskDetails;
+            tempNewTaskBodyDetails[randomId] = new List<TaskDetail>();
+            mapUserDetail.forEach((String randomDetailId, dynamic taskDetail) {
               TaskDetail tempo = new TaskDetail();
-              tempo.id = specialId;
-              tempo.taskName = taskDetail[specialId]['taskName'];
-              tempo.taskDate = taskDetail[specialId]['taskDate'];
-              newTaskDetails[randomDetailId] = new List<TaskDetail>();
-              newTaskDetails[randomDetailId].add(tempo);
-            });
-          }
+              tempo.id = randomDetailId;
+              tempo.taskName = taskDetail['taskName'];
+              tempo.taskDate = taskDetail['taskDate'];
 
-          input.taskDetails = newTaskDetails;
-        }));
-        print(newMoodTaskHeader[0].taskDetails);
+              tempNewTaskBodyDetails[randomId].add(tempo);
+            });
+          });
+        }
+
+        temp.taskDetails = tempNewTaskBodyDetails;
+        newMoodTaskHeader.add(temp);
+        print(newMoodTaskHeader[0].taskDetails['0-daily'][0]);
       });
     }
 

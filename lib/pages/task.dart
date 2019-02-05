@@ -48,55 +48,52 @@ class _TaskPageState extends State<TaskPage> {
     });
   }
 
-  Widget _buildTaskList(context, index, k) {
-    return widget.taskHeaders[index].taskDetails['0-daily'][k] != null
-        ? Column(
-            children: <Widget>[
-              SizedBox(
-                height: 5.0,
-              ),
-              Row(
-                children: <Widget>[
-                  Stack(
-                    alignment: const Alignment(-1.2, 1.2),
-                    children: [
-                      GestureDetector(
-                        onTap: _toggleFavorite,
-                        child: CircleAvatar(
-                          backgroundImage: AssetImage('assets/circle.png'),
-                          radius: 15.0,
-                          backgroundColor: Colors.transparent,
-                        ),
-                      ),
-                      (_isChecked
-                          ? GestureDetector(
-                              onTap: _toggleFavorite,
-                              child: Container(
-                                child: Image.asset(
-                                  'assets/check.png',
-                                  width: 30.0,
-                                ),
-                              ),
-                            )
-                          : Container()),
-                    ],
-                  ),
-                  SizedBox(
-                    width: 10.0,
-                  ),
-                  Text(
-                    widget
-                        .taskHeaders[index].taskDetails['0-daily'][0].taskName,
-                    style: TextStyle(
-                      fontSize: 16.0,
-                    ),
-                  )
-                ],
-              ),
-            ],
-          )
-        : Container();
-  }
+  // Widget _buildTaskList(context, index, k) {
+  //   return Column(
+  //     children: <Widget>[
+  //       SizedBox(
+  //         height: 5.0,
+  //       ),
+  //       Row(
+  //         children: <Widget>[
+  //           Stack(
+  //             alignment: const Alignment(-1.2, 1.2),
+  //             children: [
+  //               GestureDetector(
+  //                 onTap: _toggleFavorite,
+  //                 child: CircleAvatar(
+  //                   backgroundImage: AssetImage('assets/circle.png'),
+  //                   radius: 15.0,
+  //                   backgroundColor: Colors.transparent,
+  //                 ),
+  //               ),
+  //               (_isChecked
+  //                   ? GestureDetector(
+  //                       onTap: _toggleFavorite,
+  //                       child: Container(
+  //                         child: Image.asset(
+  //                           'assets/check.png',
+  //                           width: 30.0,
+  //                         ),
+  //                       ),
+  //                     )
+  //                   : Container()),
+  //             ],
+  //           ),
+  //           SizedBox(
+  //             width: 10.0,
+  //           ),
+  //           Text(
+  //             widget.taskHeaders[index].taskDetails['0-daily'][2].taskName,
+  //             style: TextStyle(
+  //               fontSize: 16.0,
+  //             ),
+  //           )
+  //         ],
+  //       ),
+  //     ],
+  //   );
+  // }
 
   Widget _buildTaskCard(context, index) {
     final double deviceWidth = MediaQuery.of(context).size.width;
@@ -141,14 +138,17 @@ class _TaskPageState extends State<TaskPage> {
                   ),
                 ],
               ),
-              ListView.builder(
-                shrinkWrap: true,
-                itemBuilder: (ctxt, idx) => _buildTaskList(ctxt, idx, index),
-                itemCount: widget.taskHeaders[index].taskDetails['0-daily'] !=
-                        null
-                    ? widget.taskHeaders[index].taskDetails['0-daily'].length
-                    : 0,
-              )
+              Text(
+                'Click Here To See More',
+                style: TextStyle(
+                  fontSize: 16.0,
+                ),
+              ),
+              // ListView.builder(
+              //   shrinkWrap: true,
+              //   itemBuilder: (ctx, idx) => _buildTaskList(ctx, idx, index),
+              //   itemCount: 3,
+              // )
             ],
           ),
         ),
@@ -157,8 +157,6 @@ class _TaskPageState extends State<TaskPage> {
   }
 
   Widget build(BuildContext context) {
-    // TODO: implement build
-    final double deviceHeigth = MediaQuery.of(context).size.height;
     final double deviceWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       body: Container(
