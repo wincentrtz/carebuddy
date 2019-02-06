@@ -175,7 +175,6 @@ class _AddTaskDetailPageState extends State<AddTaskDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(

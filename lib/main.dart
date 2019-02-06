@@ -191,10 +191,9 @@ class _MyAppState extends State<MyApp> {
 
         temp.taskDetails = tempNewTaskBodyDetails;
         newMoodTaskHeader.add(temp);
-        print(newMoodTaskHeader[0].taskDetails['0-daily'][0]);
       });
     }
-
+    await new Future.delayed(const Duration(seconds: 3));
     setState(() {
       taskHeaders = newMoodTaskHeader;
     });
@@ -213,8 +212,6 @@ class _MyAppState extends State<MyApp> {
 
     final Map<String, dynamic> responseTaskHeaderDecode =
         json.decode(responseTaskHeader.body);
-
-    print(responseTaskHeaderDecode.toString());
     Task temp = new Task();
     temp.id = responseTaskHeaderDecode["name"];
     temp.taskTitle = task["taskTitle"];
@@ -231,7 +228,6 @@ class _MyAppState extends State<MyApp> {
 
   _createTaskDetail(Map<String, dynamic> taskDetail, String taskId) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String userId = prefs.getString('userId');
     var responseTaskDetail = await http.post(
       'https://care-buddy-793cb.firebaseio.com/detail-task/' +
           taskId +
@@ -246,18 +242,16 @@ class _MyAppState extends State<MyApp> {
 
     TaskDetail temp = new TaskDetail();
     temp.id = responseTaskDetailDecode["name"];
-    temp.taskName = taskDetail["taskTitle"];
+    temp.taskName = taskDetail["taskName"];
     temp.taskDate = taskDetail["taskDate"];
 
-    setState(() {});
+    List<Task> tempo = new List<Task>();
+    tempo = taskHeaders;
+    tempo[0].taskDetails[temp.taskDate].add(temp);
 
-    // Map<String, List<TaskDetail>> tempo = taskHeaders[0].taskDetails;
-
-    // tempo[temp.taskDate].add(temp);
-
-    // setState(() {
-    //   taskHeaders[0].taskDetails = tempo;
-    // });
+    setState(() {
+      taskHeaders = tempo;
+    });
   }
 
   @override
@@ -272,6 +266,7 @@ class _MyAppState extends State<MyApp> {
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        fontFamily: 'San Francisco',
       ),
       routes: {
         '/': (BuildContext context) {

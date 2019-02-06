@@ -87,7 +87,7 @@ class DailyMoodPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 SizedBox(
-                  height: 20.0,
+                  height: 10.0,
                 ),
                 Text(
                   'Tell us how ',
