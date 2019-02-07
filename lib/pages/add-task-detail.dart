@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
 
 import '../models/task.dart';
-import '../models/task-detail.dart';
 
 class AddTaskDetailPage extends StatefulWidget {
   Task task = null;
   Function addTaskHeader;
+  Function getUserHeaderTask;
+  int index;
 
-  AddTaskDetailPage({this.addTaskHeader, this.task});
+  AddTaskDetailPage(
+      {this.addTaskHeader, this.task, this.getUserHeaderTask, this.index});
 
   @override
   State<StatefulWidget> createState() {
@@ -28,6 +27,8 @@ class _AddTaskDetailPageState extends State<AddTaskDetailPage> {
   };
 
   var keys;
+
+  var results;
 
   List<String> months = [
     'JAN',
@@ -99,24 +100,35 @@ class _AddTaskDetailPageState extends State<AddTaskDetailPage> {
     super.initState();
   }
 
+  @override
+  void didUpdateWidget(Widget oldWidget) {
+    var newKeys = widget.task.taskDetails.keys.toList();
+    setState(() {
+      keys = newKeys;
+    });
+  }
+
   Widget _buildListJob(context, index, k) {
-    return Row(
-      children: <Widget>[
-        CircleAvatar(
-          backgroundImage: AssetImage('assets/circle.png'),
-          radius: 10.0,
-          backgroundColor: Colors.transparent,
-        ),
-        SizedBox(
-          width: 20.0,
-        ),
-        Text(
-          widget.task.taskDetails[keys[k]][index].taskName,
-          style: TextStyle(
-            fontSize: 16.0,
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 5.0),
+      child: Row(
+        children: <Widget>[
+          CircleAvatar(
+            backgroundImage: AssetImage('assets/circle.png'),
+            radius: 10.0,
+            backgroundColor: Colors.transparent,
           ),
-        ),
-      ],
+          SizedBox(
+            width: 20.0,
+          ),
+          Text(
+            widget.task.taskDetails[keys[k]][index].taskName,
+            style: TextStyle(
+              fontSize: 16.0,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -163,6 +175,7 @@ class _AddTaskDetailPageState extends State<AddTaskDetailPage> {
         ),
         ListView.builder(
           shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
           itemBuilder: (ctxt, idx) => _buildListJob(ctxt, idx, index),
           itemCount: widget.task.taskDetails[keys[index]].length,
         ),
@@ -173,137 +186,147 @@ class _AddTaskDetailPageState extends State<AddTaskDetailPage> {
     );
   }
 
+  Future<Null> _refreshCallback() async {
+    await Future.delayed(Duration(seconds: 2));
+    widget.getUserHeaderTask();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Container(
-          child: Form(
-            key: _addTaskDetailFormKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                SizedBox(
-                  height: 40.0,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Icon(
-                        Icons.keyboard_arrow_left,
-                        size: 60.0,
-                        color: widget.task == null
-                            ? Color(0xFF09a24a)
-                            : Color(
-                                widget.task.generateColorFromString(
-                                    widget.task.taskColorTheme),
-                              ),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(
-                        right: 40,
-                      ),
-                      child: GestureDetector(
-                        onTap: () {
-                          _showDialogCreate();
-                          Future.delayed(const Duration(milliseconds: 500), () {
-                            _addTaskDetailFormKey.currentState.save();
-                            widget.addTaskHeader(task);
-                            Navigator.pop(context);
-                            Navigator.pop(context);
-                          });
-                        },
-                        child: widget.task == null
-                            ? Text(
-                                'Apply',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              )
-                            : Container(),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 20.0,
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 40.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+      body: RefreshIndicator(
+        onRefresh: _refreshCallback,
+        child: SingleChildScrollView(
+          child: Container(
+            child: Form(
+              key: _addTaskDetailFormKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(
+                    height: 40.0,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      TextFormField(
-                        decoration: InputDecoration(
-                          labelText: 'Reminder!',
-                          labelStyle: TextStyle(
-                            color: Colors.black,
-                            fontSize: 20.0,
-                          ),
-                        ),
-                        initialValue:
-                            widget.task == null ? "" : widget.task.taskTitle,
-                        maxLines: 2,
-                        style: TextStyle(
-                          fontSize: 30.0,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        onSaved: (String value) {
-                          task['taskTitle'] = value;
-                          task['taskColorTheme'] = currentColor.toString();
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
                         },
+                        child: Icon(
+                          Icons.keyboard_arrow_left,
+                          size: 60.0,
+                          color: widget.task == null
+                              ? Color(0xFF09a24a)
+                              : Color(
+                                  widget.task.generateColorFromString(
+                                      widget.task.taskColorTheme),
+                                ),
+                        ),
                       ),
-                      SizedBox(
-                        height: 40.0,
+                      Container(
+                        margin: EdgeInsets.only(
+                          right: 40,
+                        ),
+                        child: GestureDetector(
+                          onTap: () {
+                            _showDialogCreate();
+                            Future.delayed(const Duration(milliseconds: 500),
+                                () {
+                              _addTaskDetailFormKey.currentState.save();
+                              widget.addTaskHeader(task);
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                            });
+                          },
+                          child: widget.task == null
+                              ? Text(
+                                  'Apply',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                )
+                              : Container(),
+                        ),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            'Color Theme',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16.0,
-                            ),
-                            textAlign: TextAlign.left,
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              _showDialog();
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: widget.task == null
-                                    ? currentColor
-                                    : Color(
-                                        widget.task.generateColorFromString(
-                                            widget.task.taskColorTheme),
-                                      ),
-                              ),
-                              width: 30.0,
-                              height: 30.0,
-                            ),
-                          ),
-                        ],
-                      ),
-                      widget.task != null
-                          ? ListView.builder(
-                              shrinkWrap: true,
-                              itemBuilder: _buildListTaskDetail,
-                              itemCount: widget.task.taskDetails.length,
-                            )
-                          : Container(),
                     ],
                   ),
-                ),
-              ],
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 40.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        TextFormField(
+                          decoration: InputDecoration(
+                            labelText: 'Reminder!',
+                            labelStyle: TextStyle(
+                              color: Colors.black,
+                              fontSize: 20.0,
+                            ),
+                          ),
+                          initialValue:
+                              widget.task == null ? "" : widget.task.taskTitle,
+                          maxLines: 2,
+                          style: TextStyle(
+                            fontSize: 30.0,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          onSaved: (String value) {
+                            task['taskTitle'] = value;
+                            task['taskColorTheme'] = currentColor.toString();
+                          },
+                        ),
+                        SizedBox(
+                          height: 40.0,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text(
+                              'Color Theme',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16.0,
+                              ),
+                              textAlign: TextAlign.left,
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                _showDialog();
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: widget.task == null
+                                      ? currentColor
+                                      : Color(
+                                          widget.task.generateColorFromString(
+                                              widget.task.taskColorTheme),
+                                        ),
+                                ),
+                                width: 30.0,
+                                height: 30.0,
+                              ),
+                            ),
+                          ],
+                        ),
+                        widget.task != null
+                            ? ListView.builder(
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemBuilder: _buildListTaskDetail,
+                                itemCount: widget.task.taskDetails.length,
+                              )
+                            : Container(),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -311,8 +334,14 @@ class _AddTaskDetailPageState extends State<AddTaskDetailPage> {
       floatingActionButton: widget.task == null
           ? Container()
           : FloatingActionButton(
-              onPressed: () => Navigator.pushNamed(
-                  context, '/add-task/' + widget.task.id.toString()),
+              onPressed: () async {
+                var x = await Navigator.pushNamed(
+                    context,
+                    '/add-task/' +
+                        widget.index.toString() +
+                        '/' +
+                        widget.task.id.toString());
+              },
               backgroundColor: widget.task == null
                   ? Color(0xFF09a24a)
                   : Color(

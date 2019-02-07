@@ -5,8 +5,9 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 class AddTaskPage extends StatefulWidget {
   String taskHeader;
   Function createTaskDetail;
+  String index;
 
-  AddTaskPage(this.taskHeader, this.createTaskDetail);
+  AddTaskPage(this.taskHeader, this.createTaskDetail, this.index);
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -55,6 +56,20 @@ class _AddTaskPageState extends State<AddTaskPage> {
     super.initState();
   }
 
+  void _showDialog() {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          content: Text("Adding Task List..."),
+          actions: <Widget>[],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -91,7 +106,8 @@ class _AddTaskPageState extends State<AddTaskPage> {
                     ),
                     FlatButton(
                         child: Text('Add'),
-                        onPressed: () {
+                        onPressed: () async {
+                          _showDialog();
                           _addTaskFormKey.currentState.save();
                           if (date == null) {
                             taskDetail["taskDate"] = "0-daily";
@@ -103,7 +119,9 @@ class _AddTaskPageState extends State<AddTaskPage> {
                                 date.day.toString();
                           }
                           widget.createTaskDetail(
-                              taskDetail, widget.taskHeader);
+                              taskDetail, widget.taskHeader, widget.index);
+                          await Future.delayed(Duration(seconds: 4));
+                          Navigator.pop(context);
                           Navigator.pop(context, 'add');
                         }),
                   ],

@@ -200,7 +200,7 @@ class SupportDetailPage extends StatelessWidget {
                       Container(
                         width: 3,
                         color: Colors.black,
-                        height: 100,
+                        height: 70,
                       ),
                       Text(
                         'Albums',
@@ -209,7 +209,24 @@ class SupportDetailPage extends StatelessWidget {
                         ),
                       ),
                     ],
-                  )
+                  ),
+                  Center(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20.0),
+                        color: Colors.black,
+                      ),
+                      padding: EdgeInsets.symmetric(
+                          vertical: 10.0, horizontal: 30.0),
+                      margin: EdgeInsets.only(top: 10.0),
+                      child: Text(
+                        'Enter Chatroom',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             )

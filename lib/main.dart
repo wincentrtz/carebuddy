@@ -286,7 +286,8 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-  _createTaskDetail(Map<String, dynamic> taskDetail, String taskId) async {
+  _createTaskDetail(
+      Map<String, dynamic> taskDetail, String taskId, String i) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var responseTaskDetail = await http.post(
       'https://care-buddy-793cb.firebaseio.com/detail-task/' +
@@ -305,12 +306,18 @@ class _MyAppState extends State<MyApp> {
     temp.taskName = taskDetail["taskName"];
     temp.taskDate = taskDetail["taskDate"];
 
-    List<Task> tempo = new List<Task>();
-    tempo = taskHeaders;
-    tempo[0].taskDetails[temp.taskDate].add(temp);
+    Map<String, List<TaskDetail>> tempo = new Map<String, List<TaskDetail>>();
 
+    tempo = taskHeaders[int.parse(i)].taskDetails;
+
+    if (tempo[temp.taskDate] == null) {
+      tempo[temp.taskDate] = new List<TaskDetail>();
+    }
+    tempo[temp.taskDate].add(temp);
+
+    await new Future.delayed(const Duration(seconds: 3));
     setState(() {
-      taskHeaders = tempo;
+      taskHeaders[int.parse(i)].taskDetails = tempo;
     });
   }
 
@@ -377,13 +384,18 @@ class _MyAppState extends State<MyApp> {
             pathElements[2] != null) {
           final int index = int.parse(pathElements[2]);
           return MaterialPageRoute(
-            builder: (BuildContext context) =>
-                AddTaskDetailPage(task: taskHeaders[index]),
+            builder: (BuildContext context) => AddTaskDetailPage(
+                task: taskHeaders[index],
+                getUserHeaderTask: getUserHeaderTask,
+                index: index),
           );
-        } else if (pathElements[1] == 'add-task' && pathElements[2] != null) {
+        } else if (pathElements[1] == 'add-task' &&
+            pathElements[2] != null &&
+            pathElements[3] != null) {
+          print(pathElements[2]);
           return MaterialPageRoute(
-            builder: (BuildContext context) =>
-                AddTaskPage(pathElements[2], _createTaskDetail),
+            builder: (BuildContext context) => AddTaskPage(
+                pathElements[3], _createTaskDetail, pathElements[2]),
           );
         }
         return null;
