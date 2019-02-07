@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:charts_flutter/flutter.dart' as charts;
 
 import './models/mood.dart';
 import './models/user.dart';
 import './models/mood-trend.dart';
 import './models/task.dart';
 import './models/task-detail.dart';
+import './models/mood-chart.dart';
 
 import './pages/login.dart';
 import './pages/register.dart';
@@ -71,6 +73,8 @@ class _MyAppState extends State<MyApp> {
   User user;
   List<MoodTrend> moodTrends;
   List<Task> taskHeaders;
+  List<charts.Series<MoodChart, String>> moodCharts;
+
   bool dateDiff;
   bool userPref = false;
 
@@ -129,6 +133,7 @@ class _MyAppState extends State<MyApp> {
         json.decode(responseMoodTrendData.body);
 
     final newMoodTrends = new List<MoodTrend>();
+    List<MoodChart> tempMoodChart = new List<MoodChart>();
     moodTrendBody.forEach((String randomId, dynamic userData) {
       final MoodTrend temp = new MoodTrend(
         DateTime.parse(userData['dailyMoodDate']),
@@ -137,12 +142,67 @@ class _MyAppState extends State<MyApp> {
         userData['dailyMoodLabel'],
         userData['dailyMoodTitle'],
       );
+
+      Color moodColor;
+      int moodNumber;
+
+      if (userData['dailyMoodLabel'] == 'Amazing') {
+        moodColor = Color(0xFFffd11f);
+        moodNumber = 5;
+      } else if (userData['dailyMoodLabel'] == 'Good') {
+        moodColor = Color(0xFF3b8740);
+        moodNumber = 4;
+      } else if (userData['dailyMoodLabel'] == 'So-So') {
+        moodColor = Color(0xFF73c176);
+        moodNumber = 3;
+      } else if (userData['dailyMoodLabel'] == 'Stressed') {
+        moodColor = Color(0xFF4e8cc9);
+        moodNumber = 2;
+      } else {
+        moodColor = Color(0xFF99999a);
+        moodNumber = 1;
+      }
+
+      List<String> weeks = [
+        'MON',
+        'TUE',
+        'WED',
+        'THU',
+        'FRI',
+        'SAT',
+        'SUN',
+      ];
+
+      DateTime moodTime = DateTime.parse(userData['dailyMoodDate']);
+
+      MoodChart tempo = new MoodChart(
+          moodNumber,
+          '  ' + moodTime.day.toString() + '\n' + weeks[moodTime.weekday - 1],
+          moodColor);
+      tempMoodChart.add(tempo);
       newMoodTrends.add(temp);
     });
 
+    List<charts.Series<MoodChart, String>> tempMoodCharts =
+        _createSampleData(tempMoodChart);
+
     setState(() {
       moodTrends = newMoodTrends.reversed.toList();
+      moodCharts = tempMoodCharts;
     });
+  }
+
+  static List<charts.Series<MoodChart, String>> _createSampleData(
+      List<MoodChart> data) {
+    return [
+      new charts.Series<MoodChart, String>(
+        id: 'Moods',
+        colorFn: (MoodChart moods, _) => moods.color,
+        domainFn: (MoodChart moods, _) => moods.date,
+        measureFn: (MoodChart moods, _) => moods.moodLabel,
+        data: data,
+      )
+    ];
   }
 
   void getUserHeaderTask() async {
@@ -294,7 +354,7 @@ class _MyAppState extends State<MyApp> {
         '/support': (BuildContext context) => SupportPage(),
         '/support-detail': (BuildContext context) => SupportDetailPage(),
         '/calendar': (BuildContext context) => CalendarPage(),
-        '/mood-trend': (BuildContext context) => MoodTrendPage(),
+        '/mood-trend': (BuildContext context) => MoodTrendPage(moodCharts),
       },
       onGenerateRoute: (RouteSettings settings) {
         final List<String> pathElements = settings.name.split('/');

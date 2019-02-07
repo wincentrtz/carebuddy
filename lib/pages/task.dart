@@ -27,73 +27,53 @@ class _TaskPageState extends State<TaskPage> {
 
   var keys = [];
 
+  int totalTask = 0;
+
+  List<String> months = [
+    'JANUARI',
+    'FEBRUARY',
+    'MARCH',
+    'APRIL',
+    'MAY',
+    'JUNE',
+    'JULY',
+    'AUGUST',
+    'SEPTEMBER',
+    'OCTOBER',
+    'NOVEMBER',
+    'DECEMBER'
+  ];
+
   @override
   void initState() {
-    // TODO: implement initState
-
     if (widget.taskHeaders == null) {
-      todayKey = today.year.toString() +
-          '-' +
-          today.month.toString() +
-          '-' +
-          today.day.toString();
+      todayKey = today.day.toString() +
+          ' ' +
+          months[today.month - 1] +
+          ' ' +
+          today.year.toString();
       widget.getUserHeaderTask();
     }
     super.initState();
   }
 
-  void _toggleFavorite() {
+  @override
+  void didUpdateWidget(Widget oldWidget) {
+    String dateKey = today.year.toString() +
+        '-' +
+        today.month.toString() +
+        '-' +
+        today.day.toString();
+    int count = 0;
+    for (var i = 0; i < widget.taskHeaders.length; i++) {
+      if (widget.taskHeaders[i].taskDetails[dateKey] != null) {
+        count += widget.taskHeaders[i].taskDetails[dateKey].length;
+      }
+    }
     setState(() {
-      _isChecked = !_isChecked;
+      totalTask = count;
     });
   }
-
-  // Widget _buildTaskList(context, index, k) {
-  //   return Column(
-  //     children: <Widget>[
-  //       SizedBox(
-  //         height: 5.0,
-  //       ),
-  //       Row(
-  //         children: <Widget>[
-  //           Stack(
-  //             alignment: const Alignment(-1.2, 1.2),
-  //             children: [
-  //               GestureDetector(
-  //                 onTap: _toggleFavorite,
-  //                 child: CircleAvatar(
-  //                   backgroundImage: AssetImage('assets/circle.png'),
-  //                   radius: 15.0,
-  //                   backgroundColor: Colors.transparent,
-  //                 ),
-  //               ),
-  //               (_isChecked
-  //                   ? GestureDetector(
-  //                       onTap: _toggleFavorite,
-  //                       child: Container(
-  //                         child: Image.asset(
-  //                           'assets/check.png',
-  //                           width: 30.0,
-  //                         ),
-  //                       ),
-  //                     )
-  //                   : Container()),
-  //             ],
-  //           ),
-  //           SizedBox(
-  //             width: 10.0,
-  //           ),
-  //           Text(
-  //             widget.taskHeaders[index].taskDetails['0-daily'][2].taskName,
-  //             style: TextStyle(
-  //               fontSize: 16.0,
-  //             ),
-  //           )
-  //         ],
-  //       ),
-  //     ],
-  //   );
-  // }
 
   Widget _buildTaskCard(context, index) {
     final double deviceWidth = MediaQuery.of(context).size.width;
@@ -144,11 +124,6 @@ class _TaskPageState extends State<TaskPage> {
                   fontSize: 16.0,
                 ),
               ),
-              // ListView.builder(
-              //   shrinkWrap: true,
-              //   itemBuilder: (ctx, idx) => _buildTaskList(ctx, idx, index),
-              //   itemCount: 3,
-              // )
             ],
           ),
         ),
@@ -218,7 +193,9 @@ class _TaskPageState extends State<TaskPage> {
                               height: 10.0,
                             ),
                             Text(
-                              'You Have 3 tasks today',
+                              'You Have ' +
+                                  totalTask.toString() +
+                                  ' tasks today',
                               style: TextStyle(
                                 fontSize: 12.0,
                                 color: Colors.white,
@@ -228,7 +205,7 @@ class _TaskPageState extends State<TaskPage> {
                               height: 20.0,
                             ),
                             Text(
-                              'TUESDAY, 1 JANUARY 2019',
+                              todayKey.toString(),
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w500,

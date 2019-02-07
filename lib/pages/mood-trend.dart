@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
 
 class MoodTrendPage extends StatelessWidget {
+  final List<charts.Series> seriesList;
+  final bool animate;
+
+  MoodTrendPage(this.seriesList, {this.animate});
+
   @override
   Widget build(BuildContext context) {
     final double deviceWidth = MediaQuery.of(context).size.width;
@@ -39,7 +45,7 @@ class MoodTrendPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          'DECEMBER',
+                          'Februari',
                           style: TextStyle(
                             fontSize: 32.0,
                             color: Colors.white,
@@ -47,7 +53,7 @@ class MoodTrendPage extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          '2018',
+                          '2019',
                           style: TextStyle(
                             fontSize: 32.0,
                             color: Colors.white,
@@ -60,7 +66,19 @@ class MoodTrendPage extends StatelessWidget {
                 ],
               ),
             ),
-            Container(),
+            SizedBox(
+              height: 40,
+            ),
+            Center(
+              child: Container(
+                height: 200,
+                width: 400,
+                child: charts.BarChart(
+                  seriesList,
+                  animate: animate,
+                ),
+              ),
+            ),
             Flexible(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
